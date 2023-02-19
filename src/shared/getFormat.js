@@ -1,7 +1,6 @@
-export default function getFormat(onlyMonthPicker, onlyYearPicker, format) {
+const getFormat = (format) => {
 	if (format) return format;
-	if (onlyMonthPicker) return 'MM/YYYY';
-	if (onlyYearPicker) return 'YYYY';
-
 	return 'YYYY/MM/DD';
-}
+};
+
+export default getFormat;

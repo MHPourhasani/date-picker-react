@@ -2,9 +2,6 @@ import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
 import ElementPopper from 'react-element-popper';
 import DateObject from 'react-date-object';
 import Calendar from '../Calendar/Calendar';
-import getFormat from '../../shared/getFormat';
-import stringify from '../../shared/stringify';
-import isArray from '../../shared/isArray';
 import check from '../../shared/check';
 import toLocaleDigits from '../../shared/toLocaleDigits';
 import getStringDate from '../../shared/getStringDate';
@@ -16,45 +13,30 @@ const DatePicker = (
 		calendar,
 		locale,
 		format,
-		onlyMonthPicker,
-		onlyYearPicker,
 		onChange,
-		multiple = false,
-		name,
-		title,
 		placeholder,
 		required,
 		className = '',
 		inputClass,
-		disabled,
 		weekDays,
 		months,
 		children,
-		inputMode,
-		scrollSensitive = true,
 		hideOnScroll,
 		minDate,
 		maxDate,
-		formattingIgnoreList,
 		containerClassName = '',
 		calendarPosition = 'bottom-left',
-		editable = true,
 		onOpen,
 		onClose,
 		arrowClassName = '',
-		zIndex = 100,
 		arrow = true,
 		fixMainPosition,
 		onPositionChange,
 		onPropsChange,
-		digits,
 		shadow = true,
 		onFocusedDateChange,
-		type,
-		weekPicker,
 		mobileLabels,
 		inputLable,
-		onOpenPickNewDate = true,
 		...otherProps
 	},
 	outerRef
@@ -101,8 +83,6 @@ const DatePicker = (
 			},
 		];
 
-	console.log(temporaryDate);
-
 	function renderButtons() {
 		return (
 			<div className='flex w-full items-center justify-between text-14'>
@@ -117,55 +97,7 @@ const DatePicker = (
 
 	// if (!isMobileMode && ref.current.mobile) ref.current = { ...ref.current, mobile: false };
 
-	formattingIgnoreList = stringify(formattingIgnoreList);
-	format = getFormat(onlyMonthPicker, onlyYearPicker, format);
-
 	[calendar, locale] = check(calendar, locale);
-
-	useEffect(() => {
-		function handleClickOutside(event) {
-			// if (!isVisible || ref.current.mobile) return;
-			/**
-			 * Due to the fact that by activating the portal mode,
-			 * the calendar element is moved out of the date picker container,
-			 * it is not possible to detect external clicks using the datePickerRef.
-			 * Therefore, inputRef and calendarRef can be checked separately.
-			 *
-			 * If the clicked area is outside of both the input and calendar elements,
-			 * the calendar should be closed.
-			 */
-			let outsideList = [];
-
-			[inputRef.current, calendarRef.current].forEach((element) => {
-				if (
-					element &&
-					!element.contains(event.target) &&
-					!event.target.classList.contains('b-deselect')
-				) {
-					outsideList.push(element);
-				}
-			});
-
-			if (outsideList.length === 2) return closeCalendar();
-
-			if (calendarRef.current && calendarRef.current.contains(event.target)) {
-				datePickerRef.current.removeTransition();
-				datePickerRef.current.refreshPosition();
-			}
-		}
-
-		function handleScroll() {
-			if (hideOnScroll && isVisible) closeCalendar();
-		}
-
-		document.addEventListener('click', handleClickOutside, false);
-		document.addEventListener('scroll', handleScroll, true);
-
-		return () => {
-			document.removeEventListener('click', handleClickOutside, false);
-			document.removeEventListener('scroll', handleScroll, true);
-		};
-	}, [closeCalendar, outerRef, isVisible, hideOnScroll]);
 
 	useEffect(() => {
 		let date = value,
@@ -182,10 +114,8 @@ const DatePicker = (
 			date.set({
 				weekDays,
 				months,
-				digits,
 				locale,
 				format,
-				ignoreList: JSON.parse(formattingIgnoreList),
 			});
 
 			return date;
@@ -197,20 +127,10 @@ const DatePicker = (
 			initialValue = undefined;
 		}
 
-		if (isArray(date)) {
-			if (!isArray(date)) date = [date];
+		date = checkDate(date);
 
-			date = date.map(checkDate).filter((value) => value !== undefined);
-
-			setStringDate(getStringDate(date));
-		} else {
-			if (isArray(date)) date = getLastDate();
-
-			date = checkDate(date);
-
-			if (document.activeElement !== getInput(inputRef)) {
-				setStringDate(date ? date.format() : '');
-			}
+		if (document.activeElement !== getInput(inputRef)) {
+			setStringDate(date ? date.format() : '');
 		}
 
 		ref.current = {
@@ -224,36 +144,7 @@ const DatePicker = (
 		} else {
 			setDate(date);
 		}
-	}, [value, calendar, locale, format, weekDays, months, digits, formattingIgnoreList]);
-
-	useEffect(() => {
-		/**
-		 * If the locale is non-English, after manually changing the input value,
-		 * the caret position jumps to the end of the input.
-		 * To solve this issue, we save the previous position of caret in the ref,
-		 * and in this effect, we recover it.
-		 */
-		let { selection } = ref.current;
-
-		if (!selection) return;
-		/**
-		 * If the caret position is undefined, there is no reason to get the input.
-		 * So we only get the input if the caret position is available.
-		 */
-		let input = getInput(inputRef);
-
-		if (!input) return;
-
-		ref.current.selection = undefined;
-		/**
-		 * after manually changing the month by typing in the input,
-		 * if the calendar position is in top of the input
-		 * and the number of days in the new month is greater than the number of days in the previous month,
-		 * the calendar will cover the input due to its larger size.
-		 * To resolve this issue, we refresh the calendar position here.
-		 */
-		datePickerRef.current.refreshPosition();
-	}, [stringDate]);
+	}, [value, calendar, locale, format, weekDays, months]);
 
 	return (
 		<ElementPopper
@@ -262,9 +153,8 @@ const DatePicker = (
 			popper={isVisible && renderCalendar()}
 			active={isCalendarReady}
 			position={calendarPosition}
-			zIndex={zIndex}
 			onChange={onPositionChange}
-			containerClassName={`rmdp-container font-iranyekan ${containerClassName}`}
+			containerClassName={`rmdp-container z-200 font-iranyekan ${containerClassName}`}
 			arrowClassName={[
 				// 'rmdp-ep-arrow',
 				className,
@@ -276,7 +166,7 @@ const DatePicker = (
 
 	function setRef(element) {
 		if (element) {
-			element.openCalendar = () => setTimeout(() => openCalendar(), 10);
+			element.openCalendar = () => openCalendar();
 			element.closeCalendar = closeCalendar;
 			element.isOpen = isVisible && isCalendarReady;
 		}
@@ -290,14 +180,14 @@ const DatePicker = (
 	function renderInput() {
 		return (
 			<div className='flex flex-col items-start gap-1'>
-				<label className='text-14'>{inputLable}</label>
+				<label htmlFor='datePickerInput' className='text-14'>
+					{inputLable}
+				</label>
 				<input
+					id='datePickerInput'
 					ref={inputRef}
 					type='text'
 					value={stringDate}
-					// value={value}
-					name={name}
-					title={title}
 					required={required}
 					onFocus={openCalendar}
 					className={
@@ -306,9 +196,6 @@ const DatePicker = (
 					} // rmdp-input
 					placeholder={placeholder}
 					onChange={handleValueChange}
-					autoComplete='off'
-					disabled={disabled ? true : false}
-					inputMode={inputMode}
 				/>
 			</div>
 		);
@@ -326,17 +213,13 @@ const DatePicker = (
 				className={className}
 				weekDays={weekDays}
 				months={months}
-				digits={digits}
 				minDate={minDate}
 				maxDate={maxDate}
-				formattingIgnoreList={JSON.parse(formattingIgnoreList)}
 				onPropsChange={onPropsChange}
-				shadow={shadow}
 				onReady={setCalendarReady}
 				DatePicker={datePickerRef.current}
 				datePickerProps={datePickerProps}
 				onFocusedDateChange={handleFocusedDate}
-				weekPicker={weekPicker}
 				{...otherProps}>
 				{children}
 				{renderButtons()}
@@ -345,26 +228,15 @@ const DatePicker = (
 	}
 
 	function openCalendar() {
-		if (disabled || onOpen?.() === false) return;
+		if (onOpen?.() === false) return;
 
-		if (mustPickNewDate()) {
-			let date = new DateObject({
-				calendar,
-				locale,
-				format,
-				months,
-				weekDays,
-				digits,
-				ignoreList: JSON.parse(formattingIgnoreList),
-			});
+		// 	if ((!minDate || date > minDate) && (!maxDate || date < maxDate)) {
+		// 		handleChange(date);
+		// 		onPropsChange?.({ ...datePickerProps, value: date });
 
-			if ((!minDate || date > minDate) && (!maxDate || date < maxDate)) {
-				handleChange(date);
-				onPropsChange?.({ ...datePickerProps, value: date });
-
-				ref.current.date = date;
-			}
-		}
+		// 		ref.current.date = date;
+		// 	}
+		// }
 
 		let input = getInput(inputRef);
 
@@ -375,10 +247,6 @@ const DatePicker = (
 		} else {
 			closeCalendar();
 		}
-	}
-
-	function mustPickNewDate() {
-		return onOpenPickNewDate && !value && !ref.current.date;
 	}
 
 	function handleChange(date, force) {
@@ -394,27 +262,21 @@ const DatePicker = (
 	}
 
 	function handleValueChange(e) {
-		if (isArray(date) || !editable) return;
-
 		ref.current.selection = e.target.selectionStart;
+		// console.log(e.target);
 
 		let value = e.target.value,
 			object = {
 				calendar,
 				locale,
 				format,
-				ignoreList: JSON.parse(formattingIgnoreList),
 			};
-
-		digits = isArray(digits) ? digits : locale.digits;
 
 		if (!value) {
 			setStringDate('');
 
 			return handleChange(null);
 		}
-
-		if (!digits) return;
 
 		let newDate;
 		/**
@@ -443,23 +305,11 @@ const DatePicker = (
 		}
 
 		handleChange(newDate.isValid ? newDate : null);
-		setStringDate(toLocaleDigits(value, digits));
+		setStringDate(toLocaleDigits(value));
 	}
 
 	function setCalendarReady() {
 		setIsCalendarReady(true);
-
-		// if (!isMobileMode) return;
-
-		let popper = calendarRef.current.parentNode.parentNode;
-
-		popper.className = 'rmdp-calendar-container-mobile';
-		popper.style.position = 'fixed';
-		popper.style.transform = '';
-
-		setTimeout(() => {
-			popper.style.visibility = 'visible';
-		}, 5000);
 	}
 
 	function handleFocusedDate(focusedDate, clickedDate) {

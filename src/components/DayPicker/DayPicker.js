@@ -9,7 +9,6 @@ const DayPicker = ({
 	onChange,
 	showOtherDays = false,
 	mapDays,
-	onlyShowInRangeDates,
 	customWeekDays,
 	numberOfMonths,
 	weekStartDayIndex,
@@ -37,6 +36,7 @@ const DayPicker = ({
 
 			let monthIndex = date.monthIndex,
 				weeks = [];
+			console.log(monthIndex);
 
 			date.toFirstOfWeek().add(weekStartDayIndex, 'day');
 
@@ -147,7 +147,7 @@ const DayPicker = ({
 
 			let mustDisplaySelectedDate = (numberOfMonths > 1 && current) || numberOfMonths === 1;
 
-			if (!object.disabled || !onlyShowInRangeDates) {
+			if (!object.disabled) {
 				// if (isSameDate(date, today)) names.push(todayStyle); // rmdp-today
 				if (isSameDate(date, today)) names.push('text-primary'); // rmdp-today
 				if (isSelected(date) && mustDisplaySelectedDate && !range) {

@@ -1,10 +1,9 @@
-import React, { useState, useEffect, forwardRef, useRef, cloneElement } from 'react';
+import { useState, useEffect, forwardRef, useRef } from 'react';
 import DayPicker from '../DayPicker/DayPicker';
 import Header from '../Header/Header';
 import MonthPicker from '../MonthPicker/MonthPicker';
 import YearPicker from '../YearPicker/YearPicker';
 import DateObject from 'react-date-object';
-import getFormat from '../../shared/getFormat';
 import stringify from '../../shared/stringify';
 import toDateObject from '../../shared/toDateObject';
 import isArray from '../../shared/isArray';
@@ -18,13 +17,7 @@ function Calendar(
 		calendar,
 		locale,
 		format,
-		onlyMonthPicker,
-		onlyYearPicker,
-		range = false,
-		multiple = false,
-		className,
 		role,
-		weekDays,
 		months,
 		children,
 		onChange,
@@ -34,52 +27,37 @@ function Calendar(
 		mapDays,
 		disableMonthPicker,
 		disableYearPicker,
-		formattingIgnoreList,
 		onReady,
-		onlyShowInRangeDates = true,
-		plugins = [],
-		sort,
 		numberOfMonths = 1,
 		todayStyle,
 		calendarStyle,
 		currentDate,
 		digits,
 		buttons = true,
-		renderButton,
-		weekStartDayIndex = 0,
 		disableDayPicker,
 		onPropsChange,
 		onMonthChange,
 		onYearChange,
 		onFocusedDateChange,
-		readOnly,
 		disabled,
 		hideMonth,
 		hideYear,
-		hideWeekDays,
-		shadow = true,
-		fullYear,
-		weekPicker,
 		oneDaySelectStyle,
 		allDayStyles,
 	},
 	outerRef
 ) {
+	const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+	const weekStartDayIndex = 0;
+
 	if (currentDate && !(currentDate instanceof DateObject)) {
 		console.warn('currentDate must be instance of DateObject');
 		currentDate = undefined;
 	}
 
-	if (typeof weekStartDayIndex !== 'number' || weekStartDayIndex < 0 || weekStartDayIndex > 6)
-		weekStartDayIndex = 0;
-
 	[calendar, locale] = check(calendar, locale);
 
-	format = getFormat(onlyMonthPicker, onlyYearPicker, format);
-	formattingIgnoreList = stringify(formattingIgnoreList);
 	mapDays = [].concat(mapDays).filter(Boolean);
-
-	plugins = [].concat.apply([], plugins);
 
 	let [state, setState] = useState({}),
 		listeners = {},
@@ -88,7 +66,7 @@ function Calendar(
 	useEffect(() => {
 		setState((state) => {
 			let { currentDate } = ref.current;
-			let { date, selectedDate, initialValue, focused, mustSortDates } = state;
+			let { date, selectedDate, initialValue, focused } = state;
 
 			function checkDate(date) {
 				if (!date) return;
@@ -97,8 +75,6 @@ function Calendar(
 				if (date._format !== format) date.setFormat(format);
 
 				date.digits = digits;
-				date.ignoreList = JSON.parse(formattingIgnoreList);
-
 				return date;
 			}
 
@@ -112,21 +88,8 @@ function Calendar(
 			} else {
 				selectedDate = getSelectedDate(value, calendar, locale, format);
 
-				if (isArray(selectedDate)) {
-					if (!date) date = getDate(selectedDate[0]);
-				} else {
-					if (!date || numberOfMonths === 1) {
-						date = getDate(selectedDate);
-					} else {
-						let min = new DateObject(date).toFirstOfMonth();
-						let max = new DateObject(date)
-							.add(numberOfMonths - 1, 'months')
-							.toLastOfMonth();
-
-						if (selectedDate < min || selectedDate > max) {
-							date = new DateObject(selectedDate);
-						}
-					}
+				if (!date || numberOfMonths === 1) {
+					date = getDate(selectedDate);
 				}
 			}
 
@@ -134,23 +97,12 @@ function Calendar(
 
 			checkDate(date);
 
-			if (multiple || range || isArray(value)) {
-				if (!selectedDate) selectedDate = [];
-				if (!isArray(selectedDate)) selectedDate = [selectedDate];
-			} else if (isArray(selectedDate)) {
-				selectedDate = selectedDate[selectedDate.length - 1];
-			}
-
 			delete ref.current.currentDate;
 
 			return {
 				...state,
 				date,
 				selectedDate,
-				// multiple,
-				range,
-				// onlyMonthPicker,
-				// onlyYearPicker,
 				initialValue: state.initialValue || value,
 				value,
 				focused,
@@ -160,11 +112,8 @@ function Calendar(
 				allDayStyles,
 				todayStyle,
 				calendarStyle,
-				oneDaySelectStyle,
-				mustSortDates,
 				year: date.year,
 				today: state.today || new DateObject({ calendar }),
-				weekPicker,
 			};
 		});
 	}, [
@@ -172,16 +121,9 @@ function Calendar(
 		calendar,
 		locale,
 		format,
-		range,
-		multiple,
-		sort,
 		numberOfMonths,
 		digits,
-		formattingIgnoreList,
 		calendarStyle,
-		oneDaySelectStyle,
-		fullYear,
-		weekPicker,
 		todayStyle,
 		allDayStyles,
 	]);
@@ -201,12 +143,11 @@ function Calendar(
 
 			return {
 				...state,
-				inRangeDates: onlyShowInRangeDates ? selectedDate : state.selectedDate,
 				minDate: $minDate,
 				maxDate: $maxDate,
 			};
 		});
-	}, [minDate, maxDate, onlyShowInRangeDates, value]);
+	}, [minDate, maxDate, value]);
 
 	if (state.today && !ref.current.isReady) ref.current.isReady = true;
 
@@ -218,22 +159,19 @@ function Calendar(
 		}
 	}, [ref.current.isReady, onReady]);
 
-	let clonedPlugins = { top: [], bottom: [], left: [], right: [] },
-		globalProps = {
+	let globalProps = {
 			state,
 			setState,
 			onChange: handleChange,
-			sort,
 			handleFocusedDate,
-			fullYear,
 			monthAndYears: getMonthsAndYears(),
 		},
 		{ datePickerProps, DatePicker, ...calendarProps } = arguments[0];
 
-	return state.today ? (
-		<div ref={setRef} role={role || 'dialog'} className={`z-200`}>
-			{/* rmdp-wrapper */}
-			<div className={`shadow-calendar w-[461px] rounded-xl border-2`}>
+	return (
+		state.today && (
+			<div ref={setRef} role={role || 'dialog'} className={`z-200 w-full bg-white`}>
+				{/* rmdp-wrapper */}
 				{!disableDayPicker && (
 					// rmdp-calendar
 					<div className={`${calendarStyle} p-8`}>
@@ -242,47 +180,35 @@ function Calendar(
 							disableYearPicker={disableYearPicker}
 							disableMonthPicker={disableMonthPicker}
 							buttons={buttons}
-							renderButton={renderButton}
 							handleMonthChange={handleMonthChange}
-							disabled={disabled}
 							hideMonth={hideMonth}
 							hideYear={hideYear}
 						/>
-						<div className='relative'>
-							<DayPicker
-								{...globalProps}
-								showOtherDays={showOtherDays}
-								mapDays={mapDays}
-								onlyShowInRangeDates={onlyShowInRangeDates}
-								customWeekDays={weekDays}
-								numberOfMonths={numberOfMonths}
-								weekStartDayIndex={weekStartDayIndex}
-								hideWeekDays={hideWeekDays}
-								oneDaySelectStyle={oneDaySelectStyle}
-								allDayStyles={allDayStyles}
-								todayStyle={todayStyle}
-								
-							/>
-							{!fullYear && (
-								<>
-									{!disableYearPicker && (
-										<YearPicker {...globalProps} onYearChange={onYearChange} />
-									)}
-								</>
-							)}
-						</div>
+						<DayPicker
+							{...globalProps}
+							showOtherDays={showOtherDays}
+							mapDays={mapDays}
+							customWeekDays={weekDays}
+							numberOfMonths={numberOfMonths}
+							weekStartDayIndex={weekStartDayIndex}
+							oneDaySelectStyle={oneDaySelectStyle}
+							allDayStyles={allDayStyles}
+							todayStyle={todayStyle}
+						/>
+						{!disableYearPicker && (
+							<YearPicker {...globalProps} onYearChange={onYearChange} />
+						)}
 						{children}
 					</div>
 				)}
 			</div>
-		</div>
-	) : null;
+		)
+	);
 
 	function handleChange(selectedDate, state) {
 		if (disabled) return;
 		//This one must be done before setState
 		if (selectedDate || selectedDate === null) {
-			if (readOnly) return;
 			if (listeners.change) listeners.change.forEach((callback) => callback(selectedDate));
 		}
 
@@ -293,7 +219,7 @@ function Calendar(
 	}
 
 	function handlePropsChange(props = {}) {
-		if (readOnly || disabled) return;
+		if (disabled) return;
 
 		let allProps = {
 			...calendarProps,
@@ -308,7 +234,7 @@ function Calendar(
 	}
 
 	function handleFocusedDate(focused, clicked) {
-		if (readOnly || disabled) return;
+		if (disabled) return;
 
 		onFocusedDateChange?.(focused, clicked);
 	}
@@ -404,5 +330,5 @@ function getSelectedDate(value, calendar, locale, format) {
 		})
 		.filter((date) => date.isValid);
 
-	return isArray(value) ? selectedDate : selectedDate[0];
+	return selectedDate[0];
 }

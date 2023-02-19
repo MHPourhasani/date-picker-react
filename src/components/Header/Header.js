@@ -1,4 +1,3 @@
-import { isValidElement, cloneElement } from 'react';
 import Arrow from '../Arrow/Arrow';
 import YearPicker from '../YearPicker/YearPicker';
 
@@ -10,9 +9,7 @@ const Header = ({
 	disableYearPicker,
 	disableMonthPicker,
 	buttons,
-	renderButton,
 	handleMonthChange,
-	disabled,
 	hideMonth,
 	hideYear,
 	monthAndYears: [months, years],
@@ -49,20 +46,20 @@ const Header = ({
 					{!hideYear && (
 						<span
 							className={`flex w-16 justify-between ${
-								disabled || disableYearPicker ? 'default' : 'pointer'
+								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
 							}`}
 							onClick={() => !disableYearPicker && toggle('mustShowYearPicker')}
-							// onClick={() => !disableYearPicker && <YearPicker />}
+							// onClick={() => <YearPicker />}
 						>
 							{/* <YearPicker state={state} /> */}
-							{/* <span>{years[index]}</span> */}
-							{/* <FiChevronDown className='h-auto w-5' /> */}
+							<span>{years[index]}</span>
+							<FiChevronDown className='h-auto w-5' />
 						</span>
 					)}
 					{!hideMonth && (
 						<span
 							className={`flex w-32 items-center justify-between ${
-								disabled || disableYearPicker ? 'default' : 'pointer'
+								disableYearPicker ? 'default' : 'pointer'
 							}`}
 							// onClick={() => !disableMonthPicker && toggle('mustShowMonthPicker')}
 						>
@@ -82,22 +79,11 @@ const Header = ({
 				(direction === 'left' && isPreviousDisable) ||
 				(direction === 'right' && isNextDisable);
 
-		return renderButton instanceof Function ? (
-			renderButton(direction, handleClick, disabled)
-		) : isValidElement(renderButton) ? (
-			cloneElement(renderButton, { direction, handleClick, disabled })
-		) : (
-			<Arrow
-				direction={direction}
-				// {`rmdp-${direction} `}
-				onClick={handleClick}
-				disabled={disabled}
-			/>
-		);
+		return <Arrow direction={direction} onClick={handleClick} disabled={disabled} />;
 	}
 
 	function increaseValue(value) {
-		if (disabled || (value < 0 && isPreviousDisable) || (value > 0 && isNextDisable)) return;
+		if ((value < 0 && isPreviousDisable) || (value > 0 && isNextDisable)) return;
 
 		if (!mustShowYearPicker && !onlyYearPicker) {
 			date.toFirstOfMonth();
@@ -115,23 +101,6 @@ const Header = ({
 			if (value > 0 && maxDate && year > maxDate.year) year = maxDate.year;
 		}
 
-		//  if (!mustShowYearPicker && !onlyYearPicker) {
-		// 	date.toFirstOfMonth();
-
-		// 	if (onlyMonthPicker) {
-		// 		date.year += value;
-		// 	} else {
-		// 		date.month += value;
-
-		// 		handleMonthChange(date);
-		// 	}
-		// } else {
-		// 	year = year + value * 12;
-
-		// 	if (value < 0 && minDate && year < minDate.year) year = minDate.year;
-		// 	if (value > 0 && maxDate && year > maxDate.year) year = maxDate.year;
-		// }
-
 		setState({
 			...state,
 			date,
@@ -140,10 +109,8 @@ const Header = ({
 	}
 
 	function toggle(picker) {
-		if (disabled) return;
-
 		let object = {
-			mustShowMonthPicker: false,
+			// mustShowMonthPicker: false,
 			mustShowYearPicker: false,
 		};
 

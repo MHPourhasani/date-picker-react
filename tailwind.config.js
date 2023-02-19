@@ -20,11 +20,10 @@ module.exports = {
 			secondary800: '#14142A',
 		},
 		borderWidth: { 1: '1px', 1.5: '1.5px' },
-	},
-	extend: {
 		boxShadow: {
 			calendar: '-4px 4px 16px rgba(0, 0, 0, 0.08)',
 		},
 	},
+	extend: {},
 	plugins: [],
 };

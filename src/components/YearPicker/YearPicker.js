@@ -91,14 +91,12 @@ const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, ra
 			value={selectedYear}
 			onChange={(e) => changeHandler(e)}
 			// rmdp-year-picker
-			className={`bg-white absolute top-0 flex h-auto w-24 flex-col items-center justify-center gap-5`}>
-			{years.map((year, i) => (
+			className={`absolute top-0 flex h-auto w-16 flex-col items-center justify-center gap-5 bg-white`}>
+			{years.map((year, index) => (
 				<option
-					key={i}
+					key={index}
 					value={year}
 					onClick={() => selectYear(year)}
-					// onMouseLeave={() => rangeHover && setyearHovered()}
-					// onMouseEnter={() => rangeHover && setyearHovered(year)}
 					// rmdp-ym
 					className={`${getClassName(year)} justify-between`}>
 					{toLocaleDigits(year.toString(), digits)}

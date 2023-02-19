@@ -1,5 +1,6 @@
 import WeekDays from '../WeekDays/WeekDays';
 import getAllProps from '../../shared/getAllProps';
+import isSameDate from '../../shared/isSameDate';
 
 const ShowDayPicker = ({
 	months,
@@ -16,10 +17,7 @@ const ShowDayPicker = ({
 	showOtherDays,
 }) => {
 	return (
-		<div
-			className={`mt-5 w-full`}
-			//  onMouseLeave={() => rangeHover && setDateHovered()}
-		>
+		<div className={`mt-5 w-full`}>
 			{months.map((weeks, monthIndex) => (
 				<div key={monthIndex} className='w-full'>
 					{!hideWeekDays && (
@@ -27,8 +25,6 @@ const ShowDayPicker = ({
 							state={state}
 							customWeekDays={customWeekDays}
 							weekStartDayIndex={weekStartDayIndex}
-							// displayWeekNumbers={displayWeekNumbers}
-							// weekNumber={weekNumber}
 						/>
 					)}
 					{weeks.map((week, index) => (
@@ -68,16 +64,13 @@ const ShowDayPicker = ({
 										// یک روز
 										key={i}
 										className={`cursor-pointer text-secondary800 ${parentClassName} text-14`}
-										// onMouseEnter={() =>
-										// 	rangeHover && setDateHovered(object.date)
-										// }
 										onClick={() => {
 											if (!mustDisplayDay(object) || object.disabled) return;
 
 											selectDay(object, monthIndex, numberOfMonths);
 										}}>
 										<span
-											className={`${className} flex h-12 w-12 items-center justify-center rounded-xl text-14 hover:bg-primary`}
+											className={`${className} flex h-12 w-12 items-center justify-center rounded-xl text-14 hover:border-1.5 hover:border-primary`}
 											{...allProps}>
 											{mustDisplayDay(object) && !object.hidden
 												? children ?? object.day
