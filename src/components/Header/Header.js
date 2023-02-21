@@ -14,27 +14,17 @@ const Header = ({
 	hideYear,
 	monthAndYears: [months, years],
 }) => {
-	let {
-			date,
-			onlyMonthPicker,
-			onlyYearPicker,
-			mustShowYearPicker,
-			minDate,
-			maxDate,
-			year,
-			today,
-		} = state,
+	let { date, mustShowYearPicker, minDate, maxDate, year, today } = state,
 		isPreviousDisable =
 			minDate && date.year <= minDate.year && minDate.monthIndex > date.monthIndex - 1,
 		isNextDisable =
 			maxDate && date.year >= maxDate.year && maxDate.monthIndex < date.monthIndex + 1;
 
 	// let maxYear = today.year + 7;
-
 	// maxYear = maxYear - 12 * Math.floor((maxYear - year) / 12);
 
 	return (
-		// <div className='rmdp-header'>
+		// rmdp-header
 		<div className='flex h-6 w-full items-center justify-between text-15'>
 			<span>هجری شمسی</span>
 
@@ -85,15 +75,11 @@ const Header = ({
 	function increaseValue(value) {
 		if ((value < 0 && isPreviousDisable) || (value > 0 && isNextDisable)) return;
 
-		if (!mustShowYearPicker && !onlyYearPicker) {
+		if (!mustShowYearPicker) {
 			date.toFirstOfMonth();
 
-			if (onlyMonthPicker) {
-				date.year += value;
-			} else {
-				date.month += value;
-				handleMonthChange(date);
-			}
+			date.month += value;
+			handleMonthChange(date);
 		} else {
 			year = year + value * 12;
 

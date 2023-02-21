@@ -40,12 +40,12 @@ export default function WeekDays({
 		.concat([...weekDays].splice(0, weekStartDayIndex));
 
 	return (
-		// <div className='rmdp-week'>
-		<div className='text-16 text-primary flex w-full items-center justify-between gap-1 font-medium'>
+		// rmdp-week
+		<div className='text-16 text-primary flex w-full items-center justify-between font-medium'>
 			{weekDays.map((weekDay, index) => (
-				<div key={index}>
+				<span key={index}>
 					{weekDay}
-				</div>
+				</span>
 			))}
 		</div>
 	);

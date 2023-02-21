@@ -3,12 +3,10 @@ import selectDate from '../../shared/selectDate';
 import toLocaleDigits from '../../shared/toLocaleDigits';
 import DateObject from 'react-date-object';
 
-const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, rangeHover }) => {
-	const { date, today, minDate, maxDate, onlyYearPicker, range, onlyShowInRangeDates, year } =
+const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
+	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } =
 			state,
-		mustShowYearPicker = state.mustShowYearPicker || onlyYearPicker,
-		digits = date.digits,
-		[yearHovered, setyearHovered] = useState();
+		digits = date.digits;
 
 	const [selectedYear, setSelectedYear] = useState(today.year);
 
@@ -19,6 +17,10 @@ const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, ra
 	let minYear = today.year - 4;
 
 	minYear = minYear - 12 * Math.ceil((minYear - year) / 12);
+
+	const notInRange = (year) => {
+		return (minDate && year < minDate.year) || (maxDate && year > maxDate.year);
+	};
 
 	const years = useMemo(() => {
 		let years = [],
@@ -38,19 +40,15 @@ const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, ra
 		let date = new DateObject(state.date).setYear(year),
 			{ selectedDate, focused } = state;
 
-		if (onlyYearPicker) {
-			[selectedDate, focused] = selectDate(date, sort, state);
-		} else {
-			if (minDate && date.monthIndex < minDate.monthIndex) {
-				date = date.setMonth(minDate.monthIndex + 1);
-			} else if (maxDate && date.monthIndex > maxDate.monthIndex) {
-				date = date.setMonth(maxDate.monthIndex + 1);
-			}
-
-			onYearChange?.(date);
+		if (minDate && date.monthIndex < minDate.monthIndex) {
+			date = date.setMonth(minDate.monthIndex + 1);
+		} else if (maxDate && date.monthIndex > maxDate.monthIndex) {
+			date = date.setMonth(maxDate.monthIndex + 1);
 		}
 
-		onChange(onlyYearPicker ? selectedDate : undefined, {
+		onYearChange?.(date);
+
+		onChange(undefined, {
 			...state,
 			date,
 			focused,
@@ -63,8 +61,7 @@ const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, ra
 		let names = ['rmdp-day'],
 			{ date, selectedDate } = state;
 
-		// rmdp-disabled
-		if (notInRange(year)) names.push('text-secondary400');
+		if (notInRange(year)) names.push('text-secondary400'); // rmdp-disabled
 
 		if (names.includes('text-secondary400') && onlyShowInRangeDates) return; // rmdp-disabled
 
@@ -72,18 +69,9 @@ const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, ra
 
 		if (!onlyYearPicker) {
 			if (year === date.year) names.push('rmdp-selected bg-primary text-white rounded-md');
-		} else {
-			if (!range) {
-				if ([].concat(selectedDate).some((date) => date && date.year === year))
-					names.push('bg-primary text-white rounded-md'); // rmdp-selected
-			}
 		}
 
 		return names.join(' ');
-	};
-
-	const notInRange = (year) => {
-		return (minDate && year < minDate.year) || (maxDate && year > maxDate.year);
 	};
 
 	return (
@@ -91,14 +79,14 @@ const YearPicker = ({ state, onChange, sort, handleFocusedDate, onYearChange, ra
 			value={selectedYear}
 			onChange={(e) => changeHandler(e)}
 			// rmdp-year-picker
-			className={`absolute top-0 flex h-auto w-16 flex-col items-center justify-center gap-5 bg-white`}>
+			className={`absolute top-0 h-auto w-16 bg-white`}>
 			{years.map((year, index) => (
 				<option
 					key={index}
 					value={year}
 					onClick={() => selectYear(year)}
 					// rmdp-ym
-					className={`${getClassName(year)} justify-between`}>
+					className={`${getClassName(year)} cursor-pointer`}>
 					{toLocaleDigits(year.toString(), digits)}
 				</option>
 			))}

@@ -3,6 +3,7 @@ import DateObject from 'react-date-object';
 import selectDate from '../../shared/selectDate';
 import isSameDate from '../../shared/isSameDate';
 import ShowDayPicker from '../ShowDayPicker/ShowDayPicker';
+import getMonths from '../../shared/getMonths';
 
 const DayPicker = ({
 	state,
@@ -19,56 +20,11 @@ const DayPicker = ({
 	todayStyle,
 }) => {
 	const ref = useRef({}),
-		{ today, minDate, maxDate, range, date, selectedDate, onlyMonthPicker, onlyYearPicker } =
-			state,
-		mustShowDayPicker = !onlyMonthPicker && !onlyYearPicker;
-	// [dateHovered, setDateHovered] = useState();
+		{ today, minDate, maxDate, date, selectedDate, onlyMonthPicker, onlyYearPicker } = state;
 
 	ref.current.date = date;
 
-	const getMonths = (date, showOtherDays, numberOfMonths, weekStartDayIndex) => {
-		if (!date) return [];
-
-		let months = [];
-
-		for (let monthIndex = 0; monthIndex < numberOfMonths; monthIndex++) {
-			date = new DateObject(date).toFirstOfMonth();
-
-			let monthIndex = date.monthIndex,
-				weeks = [];
-			console.log(monthIndex);
-
-			date.toFirstOfWeek().add(weekStartDayIndex, 'day');
-
-			if (date.monthIndex === monthIndex && date.day > 1) date.subtract(7, 'days');
-
-			for (let weekIndex = 0; weekIndex < 6; weekIndex++) {
-				let week = [];
-
-				for (let weekDay = 0; weekDay < 7; weekDay++) {
-					week.push({
-						date: new DateObject(date),
-						day: date.format('D'),
-						current: date.monthIndex === monthIndex,
-					});
-
-					date.day += 1;
-				}
-
-				weeks.push(week);
-
-				if (weekIndex > 2 && date.monthIndex !== monthIndex && !showOtherDays) break;
-			}
-
-			months.push(weeks);
-		}
-
-		return months;
-	};
-
 	const months = useMemo(() => {
-		if (!mustShowDayPicker) return [];
-
 		return getMonths(ref.current.date, showOtherDays, numberOfMonths, weekStartDayIndex);
 		// eslint-disable-next-line
 	}, [
@@ -76,7 +32,6 @@ const DayPicker = ({
 		date.year,
 		date.calendar,
 		date.locale,
-		mustShowDayPicker,
 		showOtherDays,
 		numberOfMonths,
 		weekStartDayIndex,
@@ -130,29 +85,23 @@ const DayPicker = ({
 		let names = [
 				// allDayStyles,
 				'rmdp-day',
-				// 'w-12 h-12 flex justify-center items-center cursor-pointer text-secondary800'
 			],
-			{ date, hidden, current } = object;
+			{ date, current } = object;
 
-		if (!mustDisplayDay(object) || hidden) {
-			names.push('rmdp-day-hidden');
-		} else {
-			if ((minDate && date < minDate) || (maxDate && date > maxDate) || object.disabled) {
-				names.push('rmdp-disabled text-secondary400');
+		if ((minDate && date < minDate) || (maxDate && date > maxDate) || object.disabled) {
+			names.push('rmdp-disabled text-secondary400');
 
-				if (!object.disabled) object.disabled = true;
-			}
+			if (!object.disabled) object.disabled = true;
+		}
 
-			if (!current) names.push('rmdp-deactive');
+		if (!current) names.push('rmdp-deactive');
 
-			let mustDisplaySelectedDate = (numberOfMonths > 1 && current) || numberOfMonths === 1;
+		let mustDisplaySelectedDate = numberOfMonths === 1;
 
-			if (!object.disabled) {
-				// if (isSameDate(date, today)) names.push(todayStyle); // rmdp-today
-				if (isSameDate(date, today)) names.push('text-primary'); // rmdp-today
-				if (isSelected(date) && mustDisplaySelectedDate && !range) {
-					names.push('text-white bg-primary rounded-xl'); //rmdp-selected
-				}
+		if (!object.disabled) {
+			if (isSameDate(date, today)) names.push('text-primary'); // todayStyle
+			if (isSelected(date) && mustDisplaySelectedDate) {
+				names.push('text-white bg-primary rounded-xl'); //rmdp-selected
 			}
 		}
 
@@ -164,22 +113,20 @@ const DayPicker = ({
 	};
 
 	return (
-		mustShowDayPicker && (
-			<ShowDayPicker
-				months={months}
-				hideWeekDays={hideWeekDays}
-				state={state}
-				customWeekDays={customWeekDays}
-				weekStartDayIndex={weekStartDayIndex}
-				mustDisplayDay={mustDisplayDay}
-				getClassName={getClassName}
-				numberOfMonths={numberOfMonths}
-				selectDay={selectDay}
-				selectedDate={selectedDate}
-				mapDays={mapDays}
-				showOtherDays={showOtherDays}
-			/>
-		)
+		<ShowDayPicker
+			months={months}
+			hideWeekDays={hideWeekDays}
+			state={state}
+			customWeekDays={customWeekDays}
+			weekStartDayIndex={weekStartDayIndex}
+			mustDisplayDay={mustDisplayDay}
+			getClassName={getClassName}
+			numberOfMonths={numberOfMonths}
+			selectDay={selectDay}
+			selectedDate={selectedDate}
+			mapDays={mapDays}
+			showOtherDays={showOtherDays}
+		/>
 	);
 };
 

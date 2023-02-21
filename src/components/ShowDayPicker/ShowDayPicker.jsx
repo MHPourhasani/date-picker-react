@@ -4,7 +4,6 @@ import isSameDate from '../../shared/isSameDate';
 
 const ShowDayPicker = ({
 	months,
-	hideWeekDays,
 	state,
 	customWeekDays,
 	weekStartDayIndex,
@@ -17,16 +16,14 @@ const ShowDayPicker = ({
 	showOtherDays,
 }) => {
 	return (
-		<div className={`mt-5 w-full`}>
+		<div className='mt-8 w-full'>
 			{months.map((weeks, monthIndex) => (
 				<div key={monthIndex} className='w-full'>
-					{!hideWeekDays && (
-						<WeekDays
-							state={state}
-							customWeekDays={customWeekDays}
-							weekStartDayIndex={weekStartDayIndex}
-						/>
-					)}
+					<WeekDays
+						state={state}
+						customWeekDays={customWeekDays}
+						weekStartDayIndex={weekStartDayIndex}
+					/>
 					{weeks.map((week, index) => (
 						<div
 							// هر هفته
@@ -45,7 +42,8 @@ const ShowDayPicker = ({
 								// let allProps = getAllProps(object),
 								let allProps = getAllProps(object, state, showOtherDays, mapDays),
 									mustAddClassName = mustDisplayDay(object) && !object.disabled,
-									className = `${mustAddClassName ? 'sd' : ''}`,
+									// mustAddClassName = !object.disabled,
+									className = ``,
 									children = allProps.children;
 
 								if (mustAddClassName)
@@ -56,9 +54,6 @@ const ShowDayPicker = ({
 
 								let parentClassName = getClassName(object, numberOfMonths);
 
-								if (object.hidden || object.disabled)
-									className = className.replace('sd', '');
-
 								return (
 									<div
 										// یک روز
@@ -66,7 +61,6 @@ const ShowDayPicker = ({
 										className={`cursor-pointer text-secondary800 ${parentClassName} text-14`}
 										onClick={() => {
 											if (!mustDisplayDay(object) || object.disabled) return;
-
 											selectDay(object, monthIndex, numberOfMonths);
 										}}>
 										<span

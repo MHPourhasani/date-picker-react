@@ -21,10 +21,9 @@ const MonthPicker = ({
 			calendar,
 			locale,
 			onlyMonthPicker,
-			onlyYearPicker,
 			onlyShowInRangeDates,
 		} = state,
-		mustShowMonthPicker = state.mustShowMonthPicker && !onlyYearPicker;
+		mustShowMonthPicker = state.mustShowMonthPicker;
 
 	customMonths = customMonths && stringify(customMonths);
 
@@ -66,7 +65,8 @@ const MonthPicker = ({
 
 	return (
 		<div
-			className={`rmdp-month-picker text-sm absolute top-0 flex h-auto w-1/2 items-center justify-around gap-3 rounded-md ${
+			// rmdp-month-picker
+			className={`text-sm absolute top-0 flex h-auto w-1/2 items-center justify-around gap-3 rounded-md ${
 				mustShowMonthPicker ? 'flex' : 'hidden'
 			}`}>
 			{months.map((month, i) => (
