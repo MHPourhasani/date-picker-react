@@ -1,6 +1,6 @@
 import WeekDays from '../WeekDays/WeekDays';
-import getAllProps from '../../shared/getAllProps';
-import isSameDate from '../../shared/isSameDate';
+import getAllProps from '../../utils/getAllProps';
+import isSameDate from '../../common/isSameDate';
 
 const ShowDayPicker = ({
 	months,
@@ -40,7 +40,8 @@ const ShowDayPicker = ({
 								};
 
 								// let allProps = getAllProps(object),
-								let allProps = getAllProps(object, state, showOtherDays, mapDays),
+								// let allProps = getAllProps(object, state, showOtherDays, mapDays),
+								let allProps = getAllProps(object, state, mapDays),
 									mustAddClassName = mustDisplayDay(object) && !object.disabled,
 									// mustAddClassName = !object.disabled,
 									className = ``,

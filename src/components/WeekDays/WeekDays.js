@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import isArray from '../../shared/isArray';
+import isArray from '../../common/isArray';
 import DateObject from 'react-date-object';
 
 export default function WeekDays({
@@ -41,11 +41,9 @@ export default function WeekDays({
 
 	return (
 		// rmdp-week
-		<div className='text-16 text-primary flex w-full items-center justify-between font-medium'>
+		<div className='flex w-full items-center justify-between text-16 font-medium text-primary'>
 			{weekDays.map((weekDay, index) => (
-				<span key={index}>
-					{weekDay}
-				</span>
+				<span key={index}>{weekDay}</span>
 			))}
 		</div>
 	);

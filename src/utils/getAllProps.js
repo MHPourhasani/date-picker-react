@@ -1,7 +1,9 @@
-import isSameDate from './isSameDate';
+import isSameDate from '../common/isSameDate';
 
-const getAllProps = (object, state, showOtherDays, mapDays) => {
-	if (!object.current && !showOtherDays) return {};
+// const getAllProps = (object, state, showOtherDays, mapDays) => {
+const getAllProps = (object, state, mapDays) => {
+	// if (!object.current && !showOtherDays) return {};
+	if (!object.current) return {};
 	let { today } = state;
 
 	let allProps = {};

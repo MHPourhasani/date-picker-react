@@ -2,9 +2,9 @@ import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
 import ElementPopper from 'react-element-popper';
 import DateObject from 'react-date-object';
 import Calendar from '../Calendar/Calendar';
-import check from '../../shared/check';
-import toLocaleDigits from '../../shared/toLocaleDigits';
-import getStringDate from '../../shared/getStringDate';
+import check from '../../utils/check';
+import toLocaleDigits from '../../utils/toLocaleDigits';
+import getStringDate from '../../utils/getStringDate';
 import './DatePicker.css';
 
 const DatePicker = (
@@ -25,7 +25,7 @@ const DatePicker = (
 		minDate,
 		maxDate,
 		containerClassName = '',
-		calendarPosition = 'bottom-left',
+		calendarPosition = 'bottom-right',
 		onOpen,
 		onClose,
 		arrowClassName = '',
@@ -33,7 +33,6 @@ const DatePicker = (
 		fixMainPosition,
 		onPositionChange,
 		onPropsChange,
-		shadow = true,
 		onFocusedDateChange,
 		mobileLabels,
 		inputLable,
@@ -146,38 +145,7 @@ const DatePicker = (
 		}
 	}, [value, calendar, locale, format, weekDays, months]);
 
-	return (
-		<ElementPopper
-			ref={setRef}
-			element={renderInput()}
-			popper={isVisible && renderCalendar()}
-			active={isCalendarReady}
-			position={calendarPosition}
-			onChange={onPositionChange}
-			containerClassName={`rmdp-container z-200 font-iranyekan ${containerClassName}`}
-			arrowClassName={[
-				// 'rmdp-ep-arrow',
-				className,
-				arrowClassName,
-			].join(' ')}
-			{...otherProps}
-		/>
-	);
-
-	function setRef(element) {
-		if (element) {
-			element.openCalendar = () => openCalendar();
-			element.closeCalendar = closeCalendar;
-			element.isOpen = isVisible && isCalendarReady;
-		}
-
-		datePickerRef.current = element;
-
-		if (outerRef instanceof Function) return outerRef(element);
-		if (outerRef) outerRef.current = element;
-	}
-
-	function renderInput() {
+	const renderInput = () => {
 		return (
 			<div className='flex flex-col items-start gap-1'>
 				<label htmlFor='datePickerInput' className='text-14'>
@@ -199,6 +167,32 @@ const DatePicker = (
 				/>
 			</div>
 		);
+	};
+
+	return (
+		<ElementPopper
+			ref={setRef}
+			element={renderInput()}
+			popper={isVisible && renderCalendar()}
+			active={isCalendarReady}
+			position={calendarPosition}
+			onChange={onPositionChange}
+			containerClassName={`z-200 font-iranyekan ${containerClassName}`} // rmdp-container
+			{...otherProps}
+		/>
+	);
+
+	function setRef(element) {
+		if (element) {
+			element.openCalendar = () => openCalendar();
+			element.closeCalendar = closeCalendar;
+			element.isOpen = isVisible && isCalendarReady;
+		}
+
+		datePickerRef.current = element;
+
+		if (outerRef instanceof Function) return outerRef(element);
+		if (outerRef) outerRef.current = element;
 	}
 
 	function renderCalendar() {
@@ -263,7 +257,6 @@ const DatePicker = (
 
 	function handleValueChange(e) {
 		ref.current.selection = e.target.selectionStart;
-		// console.log(e.target);
 
 		let value = e.target.value,
 			object = {
@@ -274,7 +267,6 @@ const DatePicker = (
 
 		if (!value) {
 			setStringDate('');
-
 			return handleChange(null);
 		}
 

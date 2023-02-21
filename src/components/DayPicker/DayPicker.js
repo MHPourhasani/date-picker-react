@@ -1,9 +1,9 @@
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import DateObject from 'react-date-object';
-import selectDate from '../../shared/selectDate';
-import isSameDate from '../../shared/isSameDate';
+import selectDate from '../../utils/selectDate';
+import isSameDate from '../../common/isSameDate';
 import ShowDayPicker from '../ShowDayPicker/ShowDayPicker';
-import getMonths from '../../shared/getMonths';
+import getMonths from '../../utils/getMonths';
 
 const DayPicker = ({
 	state,

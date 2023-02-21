@@ -4,20 +4,21 @@ import Header from '../Header/Header';
 import MonthPicker from '../MonthPicker/MonthPicker';
 import YearPicker from '../YearPicker/YearPicker';
 import DateObject from 'react-date-object';
-import stringify from '../../shared/stringify';
-import toDateObject from '../../shared/toDateObject';
-import isArray from '../../shared/isArray';
-import check from '../../shared/check';
-import toLocaleDigits from '../../shared/toLocaleDigits';
+import stringify from '../../common/stringify';
+import toDateObject from '../../utils/toDateObject';
+import isArray from '../../common/isArray';
+import check from '../../utils/check';
+import toLocaleDigits from '../../utils/toLocaleDigits';
+import getSelectedDate from '../../utils/getSelectedDate';
 import './Calendar.css';
+import getDateInRangeOfMinAndMaxDate from '../../utils/getDateInRangeOfMinAndMaxDate';
 
-function Calendar(
+const Calendar = (
 	{
 		value,
 		calendar,
 		locale,
 		format,
-		role,
 		months,
 		children,
 		onChange,
@@ -28,7 +29,6 @@ function Calendar(
 		disableMonthPicker,
 		disableYearPicker,
 		onReady,
-		numberOfMonths = 1,
 		todayStyle,
 		calendarStyle,
 		currentDate,
@@ -46,12 +46,12 @@ function Calendar(
 		allDayStyles,
 	},
 	outerRef
-) {
+) => {
 	const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
 	const weekStartDayIndex = 0;
+	const numberOfMonths = 1;
 
 	if (currentDate && !(currentDate instanceof DateObject)) {
-		console.warn('currentDate must be instance of DateObject');
 		currentDate = undefined;
 	}
 
@@ -68,7 +68,7 @@ function Calendar(
 			let { currentDate } = ref.current;
 			let { date, selectedDate, initialValue, focused } = state;
 
-			function checkDate(date) {
+			const checkDate = (date) => {
 				if (!date) return;
 				if (date.calendar.name !== calendar.name) date.setCalendar(calendar);
 				if (date.locale.name !== locale.name) date.setLocale(locale);
@@ -76,11 +76,11 @@ function Calendar(
 
 				date.digits = digits;
 				return date;
-			}
+			};
 
-			function getDate(value) {
+			const getDate = (value) => {
 				return new DateObject(currentDate || value);
-			}
+			};
 
 			if (!value) {
 				if (!date) date = getDate({ calendar, locale, format });
@@ -166,41 +166,34 @@ function Calendar(
 			handleFocusedDate,
 			monthAndYears: getMonthsAndYears(),
 		},
-		{ datePickerProps, DatePicker, ...calendarProps } = arguments[0];
+		{ datePickerProps, DatePicker, ...calendarProps } = (...args) => args[0];
 
 	return (
 		state.today && (
-			<div ref={setRef} role={role || 'dialog'} className={`z-200 w-full bg-white`}>
-				{/* rmdp-wrapper */}
-				{!disableDayPicker && (
-					// rmdp-calendar
-					<div className={`${calendarStyle} p-8`}>
-						<Header
-							{...globalProps}
-							disableYearPicker={disableYearPicker}
-							disableMonthPicker={disableMonthPicker}
-							buttons={buttons}
-							handleMonthChange={handleMonthChange}
-							hideMonth={hideMonth}
-							hideYear={hideYear}
-						/>
-						<DayPicker
-							{...globalProps}
-							showOtherDays={showOtherDays}
-							mapDays={mapDays}
-							customWeekDays={weekDays}
-							numberOfMonths={numberOfMonths}
-							weekStartDayIndex={weekStartDayIndex}
-							oneDaySelectStyle={oneDaySelectStyle}
-							allDayStyles={allDayStyles}
-							todayStyle={todayStyle}
-						/>
-						{!disableYearPicker && (
-							<YearPicker {...globalProps} onYearChange={onYearChange} />
-						)}
-						{children}
-					</div>
-				)}
+			<div ref={setRef} className={`z-200 w-full bg-white ${calendarStyle} p-8`}>
+				{/* rmdp-wrapper ==> rmdp-calendar */}
+				<Header
+					{...globalProps}
+					disableYearPicker={disableYearPicker}
+					disableMonthPicker={disableMonthPicker}
+					buttons={buttons}
+					handleMonthChange={handleMonthChange}
+					hideMonth={hideMonth}
+					hideYear={hideYear}
+				/>
+				<DayPicker
+					{...globalProps}
+					showOtherDays={showOtherDays}
+					mapDays={mapDays}
+					customWeekDays={weekDays}
+					numberOfMonths={numberOfMonths}
+					weekStartDayIndex={weekStartDayIndex}
+					oneDaySelectStyle={oneDaySelectStyle}
+					allDayStyles={allDayStyles}
+					todayStyle={todayStyle}
+				/>
+				<YearPicker {...globalProps} onYearChange={onYearChange} />
+				{children}
 			</div>
 		)
 	);
@@ -298,37 +291,6 @@ function Calendar(
 
 		return [monthNames, years];
 	}
-}
+};
 
 export default forwardRef(Calendar);
-
-function getDateInRangeOfMinAndMaxDate(date, minDate, maxDate, calendar) {
-	if (minDate)
-		minDate = toDateObject(minDate, calendar).set({
-			hour: 0,
-			minute: 0,
-			second: 0,
-		});
-	if (maxDate)
-		maxDate = toDateObject(maxDate, calendar).set({
-			hour: 23,
-			minute: 59,
-			second: 59,
-		});
-
-	return [date, minDate, maxDate];
-}
-
-function getSelectedDate(value, calendar, locale, format) {
-	let selectedDate = []
-		.concat(value)
-		.map((date) => {
-			if (!date) return {};
-			if (date instanceof DateObject) return date;
-
-			return new DateObject({ date, calendar, locale, format });
-		})
-		.filter((date) => date.isValid);
-
-	return selectedDate[0];
-}

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import selectDate from '../../shared/selectDate';
-import isSameDate from '../../shared/isSameDate';
-import isArray from '../../shared/isArray';
-import stringify from '../../shared/stringify';
+import selectDate from '../../utils/selectDate';
+import isSameDate from '../../common/isSameDate';
+import isArray from '../../common/isArray';
+import stringify from '../../common/stringify';
 import DateObject from 'react-date-object';
 
 const MonthPicker = ({
@@ -102,7 +102,7 @@ const MonthPicker = ({
 			handleMonthChange(date);
 		}
 
-		onChange(onlyMonthPicker ? selectedDate : undefined, {
+		onChange(undefined, {
 			...state,
 			date,
 			focused,

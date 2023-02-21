@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
-import selectDate from '../../shared/selectDate';
-import toLocaleDigits from '../../shared/toLocaleDigits';
+import selectDate from '../../utils/selectDate';
+import toLocaleDigits from '../../utils/toLocaleDigits';
 import DateObject from 'react-date-object';
 
 const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
-	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } =
-			state,
+	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } = state,
 		digits = date.digits;
 
 	const [selectedYear, setSelectedYear] = useState(today.year);

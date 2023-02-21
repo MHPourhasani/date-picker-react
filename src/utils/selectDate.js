@@ -1,4 +1,4 @@
-import isSameDate from './isSameDate';
+import isSameDate from '../common/isSameDate';
 import DateObject from 'react-date-object';
 
 const selectDate = (date, { selectedDate, format, focused: previousFocused }) => {
