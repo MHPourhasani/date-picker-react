@@ -1,8 +1,14 @@
 import { useMemo, useRef } from 'react';
+
+// components
 import DateObject from 'react-date-object';
-import selectDate from '../../utils/selectDate';
-import isSameDate from '../../common/isSameDate';
 import ShowDayPicker from '../ShowDayPicker/ShowDayPicker';
+
+// common
+import isSameDate from '../../common/isSameDate';
+
+// utils
+import selectDate from '../../utils/selectDate';
 import getMonths from '../../utils/getMonths';
 
 const DayPicker = ({
@@ -20,7 +26,7 @@ const DayPicker = ({
 	todayStyle,
 }) => {
 	const ref = useRef({}),
-		{ today, minDate, maxDate, date, selectedDate, onlyMonthPicker, onlyYearPicker } = state;
+		{ today, minDate, maxDate, date, selectedDate } = state;
 
 	ref.current.date = date;
 
@@ -55,18 +61,6 @@ const DayPicker = ({
 
 		if (numberOfMonths === 1 && !current) {
 			date = new DateObject(date).toFirstOfMonth();
-		} else if (numberOfMonths > 1 && !current) {
-			if (monthIndex === 0 && dateObject < date) {
-				date = new DateObject(date).toFirstOfMonth();
-			}
-
-			if (
-				monthIndex > 0 &&
-				dateObject.monthIndex > date.monthIndex + monthIndex &&
-				monthIndex + 1 === numberOfMonths
-			) {
-				date = new DateObject(date).toFirstOfMonth().add(1, 'month');
-			}
 		}
 
 		[selectedDate, focused] = selectDate(dateObject, state);

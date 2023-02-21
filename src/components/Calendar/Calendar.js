@@ -1,17 +1,23 @@
 import { useState, useEffect, forwardRef, useRef } from 'react';
+
+// components
 import DayPicker from '../DayPicker/DayPicker';
 import Header from '../Header/Header';
 import MonthPicker from '../MonthPicker/MonthPicker';
 import YearPicker from '../YearPicker/YearPicker';
 import DateObject from 'react-date-object';
 import stringify from '../../common/stringify';
-import toDateObject from '../../utils/toDateObject';
 import isArray from '../../common/isArray';
+
+// utils
 import check from '../../utils/check';
 import toLocaleDigits from '../../utils/toLocaleDigits';
 import getSelectedDate from '../../utils/getSelectedDate';
-import './Calendar.css';
+import toDateObject from '../../utils/toDateObject';
 import getDateInRangeOfMinAndMaxDate from '../../utils/getDateInRangeOfMinAndMaxDate';
+
+// styles
+import './Calendar.css';
 
 const Calendar = (
 	{
@@ -34,7 +40,6 @@ const Calendar = (
 		currentDate,
 		digits,
 		buttons = true,
-		disableDayPicker,
 		onPropsChange,
 		onMonthChange,
 		onYearChange,

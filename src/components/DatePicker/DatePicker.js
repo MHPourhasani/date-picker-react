@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
+
+// components
 import ElementPopper from 'react-element-popper';
 import DateObject from 'react-date-object';
 import Calendar from '../Calendar/Calendar';
+
+// utils
 import check from '../../utils/check';
 import toLocaleDigits from '../../utils/toLocaleDigits';
 import getStringDate from '../../utils/getStringDate';

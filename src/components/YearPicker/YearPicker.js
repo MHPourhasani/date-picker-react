@@ -1,7 +1,11 @@
 import { useMemo, useState } from 'react';
+
+// components
+import DateObject from 'react-date-object';
+
+// utils
 import selectDate from '../../utils/selectDate';
 import toLocaleDigits from '../../utils/toLocaleDigits';
-import DateObject from 'react-date-object';
 
 const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } = state,
