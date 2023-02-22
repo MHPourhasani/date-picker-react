@@ -1,7 +1,6 @@
-import isArray from '../common/isArray';
 import toLocaleDigits from '../common/toLocaleDigits';
 
-const getMonthsAndYears = (state, numberOfMonths, months) => {
+const getMonthsAndYears = (state, numberOfMonths) => {
 	let date = state.date;
 
 	if (!date) return [];
@@ -20,13 +19,7 @@ const getMonthsAndYears = (state, numberOfMonths, months) => {
 			year++;
 		}
 
-		if (isArray(months) && months.length >= 12) {
-			let month = months[index];
-
-			monthName = isArray(month) ? month[0] : month;
-		} else {
-			monthName = date.months[index].name;
-		}
+		monthName = date.months[index].name;
 
 		year = toLocaleDigits(year.toString(), digits);
 

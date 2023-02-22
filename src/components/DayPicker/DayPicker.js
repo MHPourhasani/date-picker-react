@@ -15,7 +15,6 @@ const DayPicker = ({
 	state,
 	onChange,
 	mapDays,
-	customWeekDays,
 	numberOfMonths,
 	weekStartDayIndex,
 	handleFocusedDate,
@@ -43,7 +42,6 @@ const DayPicker = ({
 
 	const mustDisplayDay = (object) => {
 		if (object.current) return true;
-
 	};
 
 	const selectDay = ({ date: dateObject, current }, monthIndex, numberOfMonths) => {
@@ -108,7 +106,6 @@ const DayPicker = ({
 			months={months}
 			hideWeekDays={hideWeekDays}
 			state={state}
-			customWeekDays={customWeekDays}
 			weekStartDayIndex={weekStartDayIndex}
 			mustDisplayDay={mustDisplayDay}
 			getClassName={getClassName}

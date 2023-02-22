@@ -1,7 +1,9 @@
 import isArray from './isArray';
 
-export default function stringify(array) {
+const stringify = (array) => {
 	if (!isArray(array)) array = [];
 
 	return JSON.stringify(array);
-}
+};
+
+export default stringify;

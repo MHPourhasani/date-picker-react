@@ -10,7 +10,7 @@ import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 import styles from './YearPicker2.module.css';
 
-const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
+const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } = state,
 		digits = date.digits;
 
@@ -71,9 +71,7 @@ const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 
 		if (today.year === year) names.push('text-primary'); // rmdp-today
 
-		if (!onlyYearPicker) {
-			if (year === date.year) names.push('text-primary'); // rmdp-selected
-		}
+		if (year === date.year) names.push('text-primary'); // rmdp-selected
 
 		return names.join(' ');
 	};
@@ -125,4 +123,4 @@ const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	);
 };
 
-export default Example;
+export default YearPicker2;

@@ -1,13 +1,9 @@
 const getStringDate = (date) => {
-	// let selectedDate = [].concat(date).map(toString);
-	let selectedDate = date;
-
-	selectedDate.toString = function () {
+	date.toString = function () {
 		return this.filter(Boolean);
 	};
 
-	return selectedDate;
-
+	return date;
 };
 
 export default getStringDate;

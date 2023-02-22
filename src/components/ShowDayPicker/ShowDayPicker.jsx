@@ -1,12 +1,12 @@
 import WeekDays from '../WeekDays/WeekDays';
 import getAllProps from '../../utils/getAllProps';
-import isSameDate from '../../common/isSameDate';
+
+const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+const weekStartDayIndex = 0;
 
 const ShowDayPicker = ({
 	months,
 	state,
-	customWeekDays,
-	weekStartDayIndex,
 	mustDisplayDay,
 	getClassName,
 	numberOfMonths,
@@ -20,7 +20,7 @@ const ShowDayPicker = ({
 				<div key={monthIndex} className='w-full'>
 					<WeekDays
 						state={state}
-						customWeekDays={customWeekDays}
+						customWeekDays={weekDays}
 						weekStartDayIndex={weekStartDayIndex}
 					/>
 					{weeks.map((week, index) => (
@@ -38,7 +38,6 @@ const ShowDayPicker = ({
 									current: object.current,
 								};
 
-								// let allProps = getAllProps(object),
 								// let allProps = getAllProps(object, state, showOtherDays, mapDays),
 								let allProps = getAllProps(object, state, mapDays),
 									mustAddClassName = mustDisplayDay(object) && !object.disabled,

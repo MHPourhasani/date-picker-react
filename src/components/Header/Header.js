@@ -1,13 +1,11 @@
 import Arrow from '../Arrow/Arrow';
-import Example from '../YearPicker2/YearPicker2';
+import YearPicker2 from '../YearPicker2/YearPicker2';
 
 const Header = ({
 	state,
 	setState,
 	disableYearPicker,
 	disableMonthPicker,
-	buttons,
-	handleMonthChange,
 	onChange,
 	monthAndYears: [months, years],
 }) => {
@@ -35,16 +33,16 @@ const Header = ({
 							className={`flex w-16 justify-between ${
 								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
 							}`}>
-							<Example state={state} onChange={onChange} />
+							<YearPicker2 state={state} onChange={onChange} />
 						</span>
 					}
 					<span
 						className={`flex w-32 items-center justify-between ${
 							disableYearPicker ? 'cursor-default' : 'cursor-pointer'
 						}`}>
-						{buttons && getButton('left')}
+						{getButton('left')}
 						{month}
-						{buttons && getButton('right')}
+						{getButton('right')}
 					</span>
 				</div>
 			))}
@@ -67,7 +65,6 @@ const Header = ({
 			date.toFirstOfMonth();
 
 			date.month += value;
-			handleMonthChange(date);
 		} else {
 			year = year + value * 12;
 

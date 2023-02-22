@@ -3,31 +3,22 @@ import { useState, useEffect, forwardRef, useRef } from 'react';
 // components
 import DayPicker from '../DayPicker/DayPicker';
 import Header from '../Header/Header';
-import MonthPicker from '../MonthPicker/MonthPicker';
-import YearPicker from '../YearPicker/YearPicker';
 import DateObject from 'react-date-object';
-import stringify from '../../common/stringify';
-import isArray from '../../common/isArray';
 
 // utils
 import check from '../../utils/check';
-import toLocaleDigits from '../../common/toLocaleDigits';
 import getSelectedDate from '../../utils/getSelectedDate';
-import toDateObject from '../../utils/toDateObject';
 import getDateInRangeOfMinAndMaxDate from '../../utils/getDateInRangeOfMinAndMaxDate';
+import getMonthsAndYears from '../../utils/getMonthsAndYears';
 
 // styles
 import './Calendar.css';
-import getMonthsAndYears from '../../utils/getMonthsAndYears';
-import Example from '../YearPicker2/YearPicker2';
 
 const Calendar = (
 	{
 		value,
 		calendar,
 		locale,
-		format,
-		months,
 		children,
 		onChange,
 		minDate,
@@ -40,21 +31,14 @@ const Calendar = (
 		calendarStyle,
 		currentDate,
 		digits,
-		buttons = true,
 		onPropsChange,
-		onMonthChange,
-		onYearChange,
 		onFocusedDateChange,
 		disabled,
-		hideMonth,
-		hideYear,
 		oneDaySelectStyle,
 		allDayStyles,
 	},
 	outerRef
 ) => {
-	const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
-	const weekStartDayIndex = 0;
 	const numberOfMonths = 1;
 
 	if (currentDate && !(currentDate instanceof DateObject)) {
@@ -78,7 +62,6 @@ const Calendar = (
 				if (!date) return;
 				if (date.calendar.name !== calendar.name) date.setCalendar(calendar);
 				if (date.locale.name !== locale.name) date.setLocale(locale);
-				if (date._format !== format) date.setFormat(format);
 
 				date.digits = digits;
 				return date;
@@ -89,10 +72,10 @@ const Calendar = (
 			};
 
 			if (!value) {
-				if (!date) date = getDate({ calendar, locale, format });
+				if (!date) date = getDate({ calendar, locale });
 				if (initialValue) selectedDate = undefined;
 			} else {
-				selectedDate = getSelectedDate(value, calendar, locale, format);
+				selectedDate = getSelectedDate(value, calendar, locale);
 
 				if (!date || numberOfMonths === 1) {
 					date = getDate(selectedDate);
@@ -114,7 +97,6 @@ const Calendar = (
 				focused,
 				calendar,
 				locale,
-				format,
 				allDayStyles,
 				todayStyle,
 				calendarStyle,
@@ -126,7 +108,6 @@ const Calendar = (
 		value,
 		calendar,
 		locale,
-		format,
 		numberOfMonths,
 		digits,
 		calendarStyle,
@@ -170,7 +151,7 @@ const Calendar = (
 			setState,
 			onChange: handleChange,
 			handleFocusedDate,
-			monthAndYears: getMonthsAndYears(state, numberOfMonths, months),
+			monthAndYears: getMonthsAndYears(state, numberOfMonths),
 		},
 		{ datePickerProps, DatePicker, ...calendarProps } = (...args) => args[0];
 
@@ -182,22 +163,15 @@ const Calendar = (
 					{...globalProps}
 					disableYearPicker={disableYearPicker}
 					disableMonthPicker={disableMonthPicker}
-					buttons={buttons}
-					handleMonthChange={handleMonthChange}
-					hideMonth={hideMonth}
-					hideYear={hideYear}
 				/>
 				<DayPicker
 					{...globalProps}
 					mapDays={mapDays}
-					customWeekDays={weekDays}
 					numberOfMonths={numberOfMonths}
-					weekStartDayIndex={weekStartDayIndex}
 					oneDaySelectStyle={oneDaySelectStyle}
 					allDayStyles={allDayStyles}
 					todayStyle={todayStyle}
 				/>
-				{/* <YearPicker {...globalProps} onYearChange={onYearChange} /> */}
 				{children}
 			</div>
 		)
@@ -235,10 +209,6 @@ const Calendar = (
 		if (disabled) return;
 
 		onFocusedDateChange?.(focused, clicked);
-	}
-
-	function handleMonthChange(date) {
-		onMonthChange?.(date);
 	}
 
 	function setRef(element) {
