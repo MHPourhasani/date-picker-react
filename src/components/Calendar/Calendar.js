@@ -19,7 +19,7 @@ import getDateInRangeOfMinAndMaxDate from '../../utils/getDateInRangeOfMinAndMax
 // styles
 import './Calendar.css';
 import getMonthsAndYears from '../../utils/getMonthsAndYears';
-import Example from '../Example/Example';
+import Example from '../YearPicker2/YearPicker2';
 
 const Calendar = (
 	{

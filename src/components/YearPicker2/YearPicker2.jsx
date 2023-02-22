@@ -1,11 +1,14 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useMemo } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
-import { useMemo } from 'react';
 
 // components
 import DateObject from 'react-date-object';
 import toLocaleDigits from '../../common/toLocaleDigits';
+
+// icons
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+
+import styles from './YearPicker2.module.css';
 
 const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } = state,
@@ -66,10 +69,10 @@ const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 
 		if (names.includes('text-secondary400') && onlyShowInRangeDates) return; // rmdp-disabled
 
-		if (today.year === year) names.push('rmdp-today text-primary'); // text-primary
+		if (today.year === year) names.push('text-primary'); // rmdp-today
 
 		if (!onlyYearPicker) {
-			if (year === date.year) names.push('rmdp-selected bg-primary text-white rounded-md');
+			if (year === date.year) names.push('text-primary'); // rmdp-selected
 		}
 
 		return names.join(' ');
@@ -79,7 +82,7 @@ const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 		<div dir='rtl'>
 			<Listbox value={selectedYear} onChange={(e) => changeHandler(e)}>
 				<div className='relative mt-1'>
-					<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-4 bg-white py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'>
+					<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-4 bg-white py-2'>
 						<span className='block truncate'>{selectedYear}</span>
 						<IoIosArrowDown className='text-gray-400 h-auto w-4' aria-hidden='true' />
 					</Listbox.Button>
@@ -88,21 +91,25 @@ const Example = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 						as={Fragment}
 						leave='transition ease-in duration-100'
 						leaveFrom='opacity-100'
-						leaveTo='opacity-0'>
-						<Listbox.Options className='absolute max-h-60 w-28 overflow-y-scroll rounded-md bg-white py-1 text-15 shadow-calendar border-secondary300 border-1 focus:outline-none'>
+						leaveTo='opacity-0'
+						className={styles.scrollbar_hidden}>
+						<Listbox.Options className='absolute h-60 w-36 overflow-y-scroll rounded-md border-1 border-secondary300 bg-white py-1 text-15 shadow-calendar focus:outline-none'>
 							{years.map((year, index) => (
 								<Listbox.Option
 									key={index}
 									value={year}
+									disabled={notInRange(year)}
 									onClick={() => selectYear(year)}
 									className={({ active }) =>
-										`relative flex cursor-pointer select-none flex-col items-start py-2 pr-4 ${
+										`${getClassName(
+											year
+										)} relative flex cursor-pointer select-none flex-col items-start py-2 pr-4 disabled:text-secondary400 ${
 											active ? 'text-primary' : 'text-secondary800'
 										}`
 									}>
 									{({ selected }) => (
 										<span
-											className={`block truncate font-medium ${
+											className={`truncate font-medium ${
 												selected ? 'text-primary' : ''
 											}`}>
 											{toLocaleDigits(year.toString(), digits)}

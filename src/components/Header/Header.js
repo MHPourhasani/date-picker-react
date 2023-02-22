@@ -1,5 +1,5 @@
 import Arrow from '../Arrow/Arrow';
-import Example from '../Example/Example';
+import Example from '../YearPicker2/YearPicker2';
 
 const Header = ({
 	state,
@@ -8,8 +8,6 @@ const Header = ({
 	disableMonthPicker,
 	buttons,
 	handleMonthChange,
-	hideMonth,
-	hideYear,
 	onChange,
 	monthAndYears: [months, years],
 }) => {
@@ -30,26 +28,24 @@ const Header = ({
 			{months.map((month, index) => (
 				<div
 					key={index}
-					className='flex items-center justify-between' // rmdp-header-values
+					className='flex w-fit items-center justify-between' // rmdp-header-values
 				>
-					{!hideYear && (
+					{
 						<span
 							className={`flex w-16 justify-between ${
 								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
 							}`}>
 							<Example state={state} onChange={onChange} />
 						</span>
-					)}
-					{!hideMonth && (
-						<span
-							className={`flex w-32 items-center justify-between ${
-								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
-							}`}>
-							{buttons && getButton('left')}
-							{month}
-							{buttons && getButton('right')}
-						</span>
-					)}
+					}
+					<span
+						className={`flex w-32 items-center justify-between ${
+							disableYearPicker ? 'cursor-default' : 'cursor-pointer'
+						}`}>
+						{buttons && getButton('left')}
+						{month}
+						{buttons && getButton('right')}
+					</span>
 				</div>
 			))}
 		</div>
