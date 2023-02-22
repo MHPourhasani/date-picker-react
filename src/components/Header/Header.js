@@ -1,8 +1,5 @@
 import Arrow from '../Arrow/Arrow';
-import YearPicker from '../YearPicker/YearPicker';
 import Example from '../Example/Example';
-
-import { FiChevronDown } from 'react-icons/fi';
 
 const Header = ({
 	state,
@@ -39,24 +36,15 @@ const Header = ({
 						<span
 							className={`flex w-16 justify-between ${
 								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
-							}`}
-							// onClick={() => !disableYearPicker && toggle('mustShowYearPicker')}
-							// onClick={() => <Example state={state}/>}
-						>
-							{/* <YearPicker state={state} /> */}
-							{/* <Example state={state} /> */}
+							}`}>
 							<Example state={state} onChange={onChange} />
-							{/* <span>{years[index]}</span> */}
-							{/* <FiChevronDown className='h-auto w-5' /> */}
 						</span>
 					)}
 					{!hideMonth && (
 						<span
 							className={`flex w-32 items-center justify-between ${
 								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
-							}`}
-							// onClick={() => !disableMonthPicker && toggle('mustShowMonthPicker')}
-						>
+							}`}>
 							{buttons && getButton('left')}
 							{month}
 							{buttons && getButton('right')}
@@ -95,20 +83,6 @@ const Header = ({
 			...state,
 			date,
 			year,
-		});
-	}
-
-	function toggle(picker) {
-		let object = {
-			// mustShowMonthPicker: false,
-			mustShowYearPicker: false,
-		};
-
-		object[picker] = !state[picker];
-
-		setState({
-			...state,
-			...object,
 		});
 	}
 };
