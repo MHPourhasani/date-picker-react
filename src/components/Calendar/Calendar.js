@@ -11,13 +11,15 @@ import isArray from '../../common/isArray';
 
 // utils
 import check from '../../utils/check';
-import toLocaleDigits from '../../utils/toLocaleDigits';
+import toLocaleDigits from '../../common/toLocaleDigits';
 import getSelectedDate from '../../utils/getSelectedDate';
 import toDateObject from '../../utils/toDateObject';
 import getDateInRangeOfMinAndMaxDate from '../../utils/getDateInRangeOfMinAndMaxDate';
 
 // styles
 import './Calendar.css';
+import getMonthsAndYears from '../../utils/getMonthsAndYears';
+import Example from '../Example/Example';
 
 const Calendar = (
 	{
@@ -28,7 +30,6 @@ const Calendar = (
 		months,
 		children,
 		onChange,
-		showOtherDays,
 		minDate,
 		maxDate,
 		mapDays,
@@ -169,7 +170,7 @@ const Calendar = (
 			setState,
 			onChange: handleChange,
 			handleFocusedDate,
-			monthAndYears: getMonthsAndYears(),
+			monthAndYears: getMonthsAndYears(state, numberOfMonths, months),
 		},
 		{ datePickerProps, DatePicker, ...calendarProps } = (...args) => args[0];
 
@@ -188,7 +189,6 @@ const Calendar = (
 				/>
 				<DayPicker
 					{...globalProps}
-					showOtherDays={showOtherDays}
 					mapDays={mapDays}
 					customWeekDays={weekDays}
 					numberOfMonths={numberOfMonths}
@@ -197,7 +197,7 @@ const Calendar = (
 					allDayStyles={allDayStyles}
 					todayStyle={todayStyle}
 				/>
-				<YearPicker {...globalProps} onYearChange={onYearChange} />
+				{/* <YearPicker {...globalProps} onYearChange={onYearChange} /> */}
 				{children}
 			</div>
 		)
@@ -259,42 +259,6 @@ const Calendar = (
 
 		if (outerRef instanceof Function) return outerRef(element);
 		if (outerRef) outerRef.current = element;
-	}
-
-	function getMonthsAndYears() {
-		let date = state.date;
-
-		if (!date) return [];
-
-		let monthNames = [],
-			years = [],
-			digits = date.digits;
-
-		for (let monthIndex = 0; monthIndex < numberOfMonths; monthIndex++) {
-			let monthName,
-				year = date.year,
-				index = date.monthIndex + monthIndex;
-
-			if (index > 11) {
-				index -= 12;
-				year++;
-			}
-
-			if (isArray(months) && months.length >= 12) {
-				let month = months[index];
-
-				monthName = isArray(month) ? month[0] : month;
-			} else {
-				monthName = date.months[index].name;
-			}
-
-			year = toLocaleDigits(year.toString(), digits);
-
-			monthNames.push(monthName);
-			years.push(year);
-		}
-
-		return [monthNames, years];
 	}
 };
 

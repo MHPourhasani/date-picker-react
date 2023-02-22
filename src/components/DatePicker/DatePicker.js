@@ -7,8 +7,10 @@ import Calendar from '../Calendar/Calendar';
 
 // utils
 import check from '../../utils/check';
-import toLocaleDigits from '../../utils/toLocaleDigits';
+import toLocaleDigits from '../../common/toLocaleDigits';
 import getStringDate from '../../utils/getStringDate';
+
+// styles
 import './DatePicker.css';
 
 const DatePicker = (

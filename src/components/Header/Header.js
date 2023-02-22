@@ -1,5 +1,6 @@
 import Arrow from '../Arrow/Arrow';
 import YearPicker from '../YearPicker/YearPicker';
+import Example from '../Example/Example';
 
 import { FiChevronDown } from 'react-icons/fi';
 
@@ -12,6 +13,7 @@ const Header = ({
 	handleMonthChange,
 	hideMonth,
 	hideYear,
+	onChange,
 	monthAndYears: [months, years],
 }) => {
 	let { date, mustShowYearPicker, minDate, maxDate, year, today } = state,
@@ -38,18 +40,20 @@ const Header = ({
 							className={`flex w-16 justify-between ${
 								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
 							}`}
-							onClick={() => !disableYearPicker && toggle('mustShowYearPicker')}
-							// onClick={() => <YearPicker />}
+							// onClick={() => !disableYearPicker && toggle('mustShowYearPicker')}
+							// onClick={() => <Example state={state}/>}
 						>
 							{/* <YearPicker state={state} /> */}
-							<span>{years[index]}</span>
-							<FiChevronDown className='h-auto w-5' />
+							{/* <Example state={state} /> */}
+							<Example state={state} onChange={onChange} />
+							{/* <span>{years[index]}</span> */}
+							{/* <FiChevronDown className='h-auto w-5' /> */}
 						</span>
 					)}
 					{!hideMonth && (
 						<span
 							className={`flex w-32 items-center justify-between ${
-								disableYearPicker ? 'default' : 'pointer'
+								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
 							}`}
 							// onClick={() => !disableMonthPicker && toggle('mustShowMonthPicker')}
 						>

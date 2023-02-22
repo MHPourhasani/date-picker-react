@@ -14,7 +14,6 @@ import getMonths from '../../utils/getMonths';
 const DayPicker = ({
 	state,
 	onChange,
-	showOtherDays = false,
 	mapDays,
 	customWeekDays,
 	numberOfMonths,
@@ -31,14 +30,13 @@ const DayPicker = ({
 	ref.current.date = date;
 
 	const months = useMemo(() => {
-		return getMonths(ref.current.date, showOtherDays, numberOfMonths, weekStartDayIndex);
+		return getMonths(ref.current.date, numberOfMonths, weekStartDayIndex);
 		// eslint-disable-next-line
 	}, [
 		date.monthIndex,
 		date.year,
 		date.calendar,
 		date.locale,
-		showOtherDays,
 		numberOfMonths,
 		weekStartDayIndex,
 	]);
@@ -46,7 +44,6 @@ const DayPicker = ({
 	const mustDisplayDay = (object) => {
 		if (object.current) return true;
 
-		return showOtherDays;
 	};
 
 	const selectDay = ({ date: dateObject, current }, monthIndex, numberOfMonths) => {
@@ -119,7 +116,6 @@ const DayPicker = ({
 			selectDay={selectDay}
 			selectedDate={selectedDate}
 			mapDays={mapDays}
-			showOtherDays={showOtherDays}
 		/>
 	);
 };

@@ -5,7 +5,8 @@ import DateObject from 'react-date-object';
 
 // utils
 import selectDate from '../../utils/selectDate';
-import toLocaleDigits from '../../utils/toLocaleDigits';
+import toLocaleDigits from '../../common/toLocaleDigits';
+
 
 const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } = state,
@@ -49,8 +50,6 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 			date = date.setMonth(maxDate.monthIndex + 1);
 		}
 
-		onYearChange?.(date);
-
 		onChange(undefined, {
 			...state,
 			date,
@@ -82,7 +81,7 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 			value={selectedYear}
 			onChange={(e) => changeHandler(e)}
 			// rmdp-year-picker
-			className={`absolute top-0 h-auto w-16 bg-white`}>
+			className='absolute top-0 h-auto w-16 appearance-none rounded-lg bg-white'>
 			{years.map((year, index) => (
 				<option
 					key={index}
@@ -98,3 +97,5 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 };
 
 export default YearPicker;
+
+

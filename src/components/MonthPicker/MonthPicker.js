@@ -13,16 +13,7 @@ const MonthPicker = ({
 	handleMonthChange,
 	handleFocusedDate,
 }) => {
-	const {
-			date,
-			today,
-			minDate,
-			maxDate,
-			calendar,
-			locale,
-			onlyMonthPicker,
-			onlyShowInRangeDates,
-		} = state,
+	const { date, today, minDate, maxDate, calendar, locale, onlyShowInRangeDates } = state,
 		mustShowMonthPicker = state.mustShowMonthPicker;
 
 	customMonths = customMonths && stringify(customMonths);
@@ -63,6 +54,49 @@ const MonthPicker = ({
 		return monthsArray;
 	}, [calendar, locale, customMonths, state.date.year, state.date._format]);
 
+	const selectMonth = (dateObject) => {
+		let { selectedDate, focused } = state,
+			{ year, monthIndex } = dateObject;
+
+		if (
+			(minDate && year <= minDate.year && monthIndex < minDate.monthIndex) ||
+			(maxDate && year >= maxDate.year && monthIndex > maxDate.monthIndex)
+		)
+			return;
+
+		date.setMonth(monthIndex + 1);
+
+		handleMonthChange(date);
+
+		onChange(undefined, {
+			...state,
+			date,
+			focused,
+			selectedDate,
+			mustShowMonthPicker: false,
+		});
+	};
+
+	const getClassName = (dateObject) => {
+		let names = ['relative px-3 py-2 cursor-pointer'], // rmdp-day
+			{ year, monthIndex } = dateObject;
+
+		if (
+			(minDate &&
+				(year < minDate.year ||
+					(year === minDate.year && monthIndex < minDate.monthIndex))) ||
+			(maxDate &&
+				(year > maxDate.year || (year === maxDate.year && monthIndex > maxDate.monthIndex)))
+		)
+			names.push('text-secondary400'); // rmdp-disabled
+
+		if (names.includes('text-secondary400') && onlyShowInRangeDates) return; // mdp-disabled
+
+		if (isSameDate(today, dateObject, true)) names.push('text-primary'); // rmdp-today
+
+		return names.join(' ');
+	};
+
 	return (
 		<div
 			// rmdp-month-picker
@@ -83,53 +117,6 @@ const MonthPicker = ({
 			))}
 		</div>
 	);
-
-	function selectMonth(dateObject) {
-		let { selectedDate, focused } = state,
-			{ year, monthIndex } = dateObject;
-
-		if (
-			(minDate && year <= minDate.year && monthIndex < minDate.monthIndex) ||
-			(maxDate && year >= maxDate.year && monthIndex > maxDate.monthIndex)
-		)
-			return;
-
-		date.setMonth(monthIndex + 1);
-
-		if (onlyMonthPicker) {
-			[selectedDate, focused] = selectDate(dateObject, sort, state);
-		} else {
-			handleMonthChange(date);
-		}
-
-		onChange(undefined, {
-			...state,
-			date,
-			focused,
-			selectedDate,
-			mustShowMonthPicker: false,
-		});
-	}
-
-	function getClassName(dateObject) {
-		let names = ['relative px-3 py-2 cursor-pointer'], // rmdp-day
-			{ year, monthIndex } = dateObject;
-
-		if (
-			(minDate &&
-				(year < minDate.year ||
-					(year === minDate.year && monthIndex < minDate.monthIndex))) ||
-			(maxDate &&
-				(year > maxDate.year || (year === maxDate.year && monthIndex > maxDate.monthIndex)))
-		)
-			names.push('text-secondary400'); // rmdp-disabled
-
-		if (names.includes('text-secondary400') && onlyShowInRangeDates) return; // mdp-disabled
-
-		if (isSameDate(today, dateObject, true)) names.push('text-primary'); // rmdp-today
-
-		return names.join(' ');
-	}
 };
 
 export default MonthPicker;

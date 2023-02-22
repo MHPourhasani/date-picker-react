@@ -1,11 +1,13 @@
-import DateObject from "react-date-object";
+import DateObject from 'react-date-object';
 
-export default function toDateObject(date, calendar) {
-  if (date instanceof DateObject) {
-    date.setCalendar(calendar);
-  } else {
-    date = new DateObject({ date, calendar });
-  }
+const toDateObject = (date, calendar) => {
+	if (date instanceof DateObject) {
+		date.setCalendar(calendar);
+	} else {
+		date = new DateObject({ date, calendar });
+	}
 
-  return date;
-}
+	return date;
+};
+
+export default toDateObject;
