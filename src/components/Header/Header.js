@@ -4,7 +4,6 @@ import YearPicker2 from '../YearPicker2/YearPicker2';
 const Header = ({
 	state,
 	setState,
-	disableYearPicker,
 	disableMonthPicker,
 	onChange,
 	monthAndYears: [months, years],
@@ -29,17 +28,11 @@ const Header = ({
 					className='flex w-fit items-center justify-between' // rmdp-header-values
 				>
 					{
-						<span
-							className={`flex w-16 justify-between ${
-								disableYearPicker ? 'cursor-default' : 'cursor-pointer'
-							}`}>
+						<span className={`flex w-16 cursor-pointer justify-between`}>
 							<YearPicker2 state={state} onChange={onChange} />
 						</span>
 					}
-					<span
-						className={`flex w-32 items-center justify-between ${
-							disableYearPicker ? 'cursor-default' : 'cursor-pointer'
-						}`}>
+					<span className={`flex w-32 cursor-pointer items-center justify-between`}>
 						{getButton('left')}
 						{month}
 						{getButton('right')}

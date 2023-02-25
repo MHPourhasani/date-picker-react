@@ -6,7 +6,6 @@ import DateObject from 'react-date-object';
 import Calendar from '../Calendar/Calendar';
 
 // utils
-import check from '../../utils/check';
 import toLocaleDigits from '../../common/toLocaleDigits';
 import getStringDate from '../../utils/getStringDate';
 
@@ -19,18 +18,12 @@ import './DatePicker.css';
 const DatePicker = (
 	{
 		value,
-		format,
 		onChange,
-		placeholder,
 		className = '',
 		children,
 		minDate,
 		maxDate,
 		containerClassName = '',
-		calendarPosition = 'bottom-right',
-		onOpen,
-		onClose,
-		onFocusedDateChange,
 		inputLabel,
 		inputLabelClassname,
 		inputClassname,
@@ -49,15 +42,13 @@ const DatePicker = (
 		ref = useRef({}),
 		datePickerProps = (...args) => args[0],
 		closeCalendar = useCallback(() => {
-			if (onClose?.() === false) return;
-
 			let input = getInput(inputRef);
 
 			if (input) input.blur();
 
 			setIsVisible(false);
 			setIsCalendarReady(false);
-		}, [onClose]),
+		}, []),
 		buttons = [
 			{
 				className: 'text-primary flex-1 h-12',
@@ -74,7 +65,6 @@ const DatePicker = (
 						handleChange(temporaryDate, true);
 						setTemporaryDate(undefined);
 					}
-					// setStringDate(getStringDate(date))
 					closeCalendar();
 				},
 				label: 'تایید',
@@ -97,22 +87,16 @@ const DatePicker = (
 
 	// if (!isMobileMode && ref.current.mobile) ref.current = { ...ref.current, mobile: false };
 
-	// [calendar, locale] = check(calendar, locale);
-
 	useEffect(() => {
 		let date = value,
 			{ date: refDate } = ref.current;
 
 		const checkDate = (date) => {
-			if (!(date instanceof DateObject))
-				date = new DateObject({ date, calendar, locale, format });
+			if (!(date instanceof DateObject)) date = new DateObject({ date, calendar, locale });
 
 			if (date.calendar !== calendar) date.setCalendar(calendar);
 
-			date.set({
-				locale,
-				format,
-			});
+			date.set({ locale });
 
 			return date;
 		};
@@ -134,7 +118,7 @@ const DatePicker = (
 		};
 
 		setDate(date);
-	}, [value, calendar, locale, format]);
+	}, [value, calendar, locale]);
 
 	const renderInput = () => {
 		return (
@@ -152,26 +136,13 @@ const DatePicker = (
 						inputClassname ||
 						'h-12 w-36 rounded-xl border-1.5 border-secondary300 text-center text-16 tracking-widest'
 					} // rmdp-input
-					placeholder={placeholder}
 					onChange={handleValueChange}
 				/>
 			</div>
 		);
 	};
 
-	return (
-		<ElementPopper
-			ref={setRef}
-			element={renderInput()}
-			popper={isVisible && renderCalendar()}
-			active={isCalendarReady}
-			position={calendarPosition}
-			containerClassName={`z-200 font-iranyekan ${containerClassName}`} // rmdp-container
-			{...otherProps}
-		/>
-	);
-
-	function setRef(element) {
+	const setRef = (element) => {
 		if (element) {
 			element.openCalendar = () => openCalendar();
 			element.closeCalendar = closeCalendar;
@@ -182,9 +153,9 @@ const DatePicker = (
 
 		if (outerRef instanceof Function) return outerRef(element);
 		if (outerRef) outerRef.current = element;
-	}
+	};
 
-	function renderCalendar() {
+	const renderCalendar = () => {
 		return (
 			<Calendar
 				ref={calendarRef}
@@ -192,24 +163,20 @@ const DatePicker = (
 				onChange={handleChange}
 				calendar={calendar}
 				locale={locale}
-				format={format}
 				className={className}
 				minDate={minDate}
 				maxDate={maxDate}
-				onReady={setCalendarReady}
+				onReady={() => setIsCalendarReady(true)}
 				DatePicker={datePickerRef.current}
 				datePickerProps={datePickerProps}
-				onFocusedDateChange={handleFocusedDate}
 				{...otherProps}>
 				{children}
 				{renderButtons()}
 			</Calendar>
 		);
-	}
+	};
 
-	function openCalendar() {
-		if (onOpen?.() === false) return;
-
+	const openCalendar = () => {
 		if ((!minDate || date > minDate) && (!maxDate || date < maxDate)) {
 			handleChange(date);
 			ref.current.date = date;
@@ -224,21 +191,19 @@ const DatePicker = (
 		} else {
 			closeCalendar();
 		}
-	}
+	};
 
-	function handleChange(date, force) {
+	const handleChange = (date, force) => {
 		if (!force) return setTemporaryDate(date);
 
 		setDate(date);
-
 		ref.current = { ...ref.current, date };
-
 		onChange?.(date);
 
 		if (date) setStringDate(getStringDate(date));
-	}
+	};
 
-	function handleValueChange(e) {
+	const handleValueChange = (e) => {
 		ref.current.selection = e.target.selectionStart;
 
 		let value = e.target.value;
@@ -250,23 +215,24 @@ const DatePicker = (
 
 		handleChange(null);
 		setStringDate(toLocaleDigits(value));
-	}
+	};
 
-	function setCalendarReady() {
-		setIsCalendarReady(true);
-	}
+	const getInput = (inputRef) => {
+		if (!inputRef.current) return;
+		return inputRef.current;
+	};
 
-	function handleFocusedDate(focusedDate, clickedDate) {
-		onFocusedDateChange?.(focusedDate, clickedDate);
-	}
+	return (
+		<ElementPopper
+			ref={setRef}
+			element={renderInput()}
+			popper={isVisible && renderCalendar()}
+			active={isCalendarReady}
+			position='bottom-right'
+			containerClassName={`z-200 font-iranyekan ${containerClassName}`} // rmdp-container
+			{...otherProps}
+		/>
+	);
 };
-
-function getInput(inputRef) {
-	if (!inputRef.current) return;
-
-	return inputRef.current.tagName === 'INPUT'
-		? inputRef.current
-		: inputRef.current.querySelector('input');
-}
 
 export default forwardRef(DatePicker);

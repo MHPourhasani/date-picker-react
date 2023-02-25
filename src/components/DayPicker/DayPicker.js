@@ -14,11 +14,9 @@ import getMonths from '../../utils/getMonths';
 const DayPicker = ({
 	state,
 	onChange,
-	mapDays,
 	numberOfMonths,
 	weekStartDayIndex,
 	handleFocusedDate,
-	hideWeekDays,
 	monthAndYears: [monthNames],
 	allDayStyles,
 	todayStyle,
@@ -104,7 +102,6 @@ const DayPicker = ({
 	return (
 		<ShowDayPicker
 			months={months}
-			hideWeekDays={hideWeekDays}
 			state={state}
 			weekStartDayIndex={weekStartDayIndex}
 			mustDisplayDay={mustDisplayDay}
@@ -112,7 +109,6 @@ const DayPicker = ({
 			numberOfMonths={numberOfMonths}
 			selectDay={selectDay}
 			selectedDate={selectedDate}
-			mapDays={mapDays}
 		/>
 	);
 };

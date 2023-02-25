@@ -12,7 +12,6 @@ const ShowDayPicker = ({
 	numberOfMonths,
 	selectDay,
 	selectedDate,
-	mapDays,
 }) => {
 	return (
 		<div className='mt-8 w-full'>
@@ -38,8 +37,7 @@ const ShowDayPicker = ({
 									current: object.current,
 								};
 
-								// let allProps = getAllProps(object, state, showOtherDays, mapDays),
-								let allProps = getAllProps(object, state, mapDays),
+								let allProps = getAllProps(object, state),
 									mustAddClassName = mustDisplayDay(object) && !object.disabled,
 									// mustAddClassName = !object.disabled,
 									className = ``,

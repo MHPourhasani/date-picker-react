@@ -23,35 +23,25 @@ const Calendar = (
 		onChange,
 		minDate,
 		maxDate,
-		mapDays,
 		disableMonthPicker,
-		disableYearPicker,
 		onReady,
-		todayStyle,
-		calendarStyle,
-		currentDate,
 		digits,
 		onPropsChange,
 		onFocusedDateChange,
-		disabled,
 		oneDaySelectStyle,
+		calendarStyle,
+		todayStyle,
 		allDayStyles,
 	},
 	outerRef
 ) => {
 	const numberOfMonths = 1;
 
-	if (currentDate && !(currentDate instanceof DateObject)) {
-		currentDate = undefined;
-	}
-
 	[calendar, locale] = check(calendar, locale);
-
-	mapDays = [].concat(mapDays).filter(Boolean);
 
 	let [state, setState] = useState({}),
 		listeners = {},
-		ref = useRef({ mustCallOnReady: true, currentDate });
+		ref = useRef({ mustCallOnReady: true });
 
 	useEffect(() => {
 		setState((state) => {
@@ -97,32 +87,20 @@ const Calendar = (
 				focused,
 				calendar,
 				locale,
-				allDayStyles,
-				todayStyle,
-				calendarStyle,
 				year: date.year,
 				today: state.today || new DateObject({ calendar }),
 			};
 		});
-	}, [
-		value,
-		calendar,
-		locale,
-		numberOfMonths,
-		digits,
-		calendarStyle,
-		todayStyle,
-		allDayStyles,
-	]);
+	}, [value, calendar, locale, numberOfMonths, digits]);
 
 	useEffect(() => {
 		if (!minDate && !maxDate) return;
 
 		setState((state) => {
-			let { calendar, locale, format } = state;
+			let { calendar, locale } = state;
 
 			let [selectedDate, $minDate, $maxDate] = getDateInRangeOfMinAndMaxDate(
-				getSelectedDate(value, calendar, locale, format),
+				getSelectedDate(value, calendar, locale),
 				minDate,
 				maxDate,
 				calendar
@@ -161,12 +139,10 @@ const Calendar = (
 				{/* rmdp-wrapper ==> rmdp-calendar */}
 				<Header
 					{...globalProps}
-					disableYearPicker={disableYearPicker}
 					disableMonthPicker={disableMonthPicker}
 				/>
 				<DayPicker
 					{...globalProps}
-					mapDays={mapDays}
 					numberOfMonths={numberOfMonths}
 					oneDaySelectStyle={oneDaySelectStyle}
 					allDayStyles={allDayStyles}
@@ -178,7 +154,6 @@ const Calendar = (
 	);
 
 	function handleChange(selectedDate, state) {
-		if (disabled) return;
 		//This one must be done before setState
 		if (selectedDate || selectedDate === null) {
 			if (listeners.change) listeners.change.forEach((callback) => callback(selectedDate));
@@ -191,8 +166,6 @@ const Calendar = (
 	}
 
 	function handlePropsChange(props = {}) {
-		if (disabled) return;
-
 		let allProps = {
 			...calendarProps,
 			...datePickerProps,
@@ -206,8 +179,6 @@ const Calendar = (
 	}
 
 	function handleFocusedDate(focused, clicked) {
-		if (disabled) return;
-
 		onFocusedDateChange?.(focused, clicked);
 	}
 
@@ -216,8 +187,6 @@ const Calendar = (
 			element.date = state.date;
 
 			element.set = function (key, value) {
-				if (disabled) return;
-
 				setState({
 					...state,
 					date: new DateObject(state.date.set(key, value)),
