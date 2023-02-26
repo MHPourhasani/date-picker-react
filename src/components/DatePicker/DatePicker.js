@@ -15,22 +15,19 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 // styles
 import './DatePicker.css';
 
-const DatePicker = (
-	{
-		value,
-		onChange,
-		className = '',
-		children,
-		minDate,
-		maxDate,
-		containerClassName = '',
-		inputLabel,
-		inputLabelClassname,
-		inputClassname,
-		...otherProps
-	},
-	outerRef
-) => {
+const DatePicker = ({
+	value,
+	onChange,
+	className = '',
+	children,
+	minDate,
+	maxDate,
+	containerClassName = '',
+	inputLabel,
+	inputLabelClassname,
+	inputClassname,
+	...otherProps
+}) => {
 	let [date, setDate] = useState(),
 		[temporaryDate, setTemporaryDate] = useState(),
 		[stringDate, setStringDate] = useState(''),
@@ -85,17 +82,12 @@ const DatePicker = (
 		);
 	};
 
-	// if (!isMobileMode && ref.current.mobile) ref.current = { ...ref.current, mobile: false };
-
 	useEffect(() => {
 		let date = value,
 			{ date: refDate } = ref.current;
 
 		const checkDate = (date) => {
 			if (!(date instanceof DateObject)) date = new DateObject({ date, calendar, locale });
-
-			if (date.calendar !== calendar) date.setCalendar(calendar);
-
 			date.set({ locale });
 
 			return date;
@@ -150,9 +142,6 @@ const DatePicker = (
 		}
 
 		datePickerRef.current = element;
-
-		if (outerRef instanceof Function) return outerRef(element);
-		if (outerRef) outerRef.current = element;
 	};
 
 	const renderCalendar = () => {

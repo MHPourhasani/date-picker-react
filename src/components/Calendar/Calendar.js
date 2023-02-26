@@ -6,7 +6,6 @@ import Header from '../Header/Header';
 import DateObject from 'react-date-object';
 
 // utils
-import check from '../../utils/check';
 import getSelectedDate from '../../utils/getSelectedDate';
 import getDateInRangeOfMinAndMaxDate from '../../utils/getDateInRangeOfMinAndMaxDate';
 import getMonthsAndYears from '../../utils/getMonthsAndYears';
@@ -14,30 +13,22 @@ import getMonthsAndYears from '../../utils/getMonthsAndYears';
 // styles
 import './Calendar.css';
 
-const Calendar = (
-	{
-		value,
-		calendar,
-		locale,
-		children,
-		onChange,
-		minDate,
-		maxDate,
-		disableMonthPicker,
-		onReady,
-		digits,
-		onPropsChange,
-		onFocusedDateChange,
-		oneDaySelectStyle,
-		calendarStyle,
-		todayStyle,
-		allDayStyles,
-	},
-	outerRef
-) => {
+const Calendar = ({
+	value,
+	calendar,
+	locale,
+	children,
+	onChange,
+	minDate,
+	maxDate,
+	disableMonthPicker,
+	onReady,
+	oneDaySelectStyle,
+	calendarStyle,
+	todayStyle,
+	allDayStyles,
+}) => {
 	const numberOfMonths = 1;
-
-	[calendar, locale] = check(calendar, locale);
 
 	let [state, setState] = useState({}),
 		listeners = {},
@@ -53,7 +44,6 @@ const Calendar = (
 				if (date.calendar.name !== calendar.name) date.setCalendar(calendar);
 				if (date.locale.name !== locale.name) date.setLocale(locale);
 
-				date.digits = digits;
 				return date;
 			};
 
@@ -91,7 +81,7 @@ const Calendar = (
 				today: state.today || new DateObject({ calendar }),
 			};
 		});
-	}, [value, calendar, locale, numberOfMonths, digits]);
+	}, [value, calendar, locale, numberOfMonths]);
 
 	useEffect(() => {
 		if (!minDate && !maxDate) return;
@@ -124,36 +114,7 @@ const Calendar = (
 		}
 	}, [ref.current.isReady, onReady]);
 
-	let globalProps = {
-			state,
-			setState,
-			onChange: handleChange,
-			handleFocusedDate,
-			monthAndYears: getMonthsAndYears(state, numberOfMonths),
-		},
-		{ datePickerProps, DatePicker, ...calendarProps } = (...args) => args[0];
-
-	return (
-		state.today && (
-			<div ref={setRef} className={`z-200 w-full bg-white ${calendarStyle} p-8`}>
-				{/* rmdp-wrapper ==> rmdp-calendar */}
-				<Header
-					{...globalProps}
-					disableMonthPicker={disableMonthPicker}
-				/>
-				<DayPicker
-					{...globalProps}
-					numberOfMonths={numberOfMonths}
-					oneDaySelectStyle={oneDaySelectStyle}
-					allDayStyles={allDayStyles}
-					todayStyle={todayStyle}
-				/>
-				{children}
-			</div>
-		)
-	);
-
-	function handleChange(selectedDate, state) {
+	const handleChange = (selectedDate, state) => {
 		//This one must be done before setState
 		if (selectedDate || selectedDate === null) {
 			if (listeners.change) listeners.change.forEach((callback) => callback(selectedDate));
@@ -161,28 +122,17 @@ const Calendar = (
 
 		if (state) setState(state);
 		if (selectedDate || selectedDate === null) onChange?.(selectedDate);
+	};
 
-		handlePropsChange({ value: selectedDate });
-	}
+	let globalProps = {
+			state,
+			setState,
+			onChange: handleChange,
+			monthAndYears: getMonthsAndYears(state, numberOfMonths),
+		},
+		{ datePickerProps, DatePicker, ...calendarProps } = (...args) => args[0];
 
-	function handlePropsChange(props = {}) {
-		let allProps = {
-			...calendarProps,
-			...datePickerProps,
-			...props,
-			value: props.value ?? state.selectedDate,
-		};
-
-		delete allProps.onPropsChange;
-
-		onPropsChange?.(allProps);
-	}
-
-	function handleFocusedDate(focused, clicked) {
-		onFocusedDateChange?.(focused, clicked);
-	}
-
-	function setRef(element) {
+	const setRef = (element) => {
 		if (element) {
 			element.date = state.date;
 
@@ -195,10 +145,24 @@ const Calendar = (
 		}
 
 		ref.current.Calendar = element;
+	};
 
-		if (outerRef instanceof Function) return outerRef(element);
-		if (outerRef) outerRef.current = element;
-	}
+	return (
+		state.today && (
+			<div ref={setRef} className={`z-200 w-full bg-white ${calendarStyle} p-8`}>
+				{/* rmdp-wrapper ==> rmdp-calendar */}
+				<Header {...globalProps} disableMonthPicker={disableMonthPicker} />
+				<DayPicker
+					{...globalProps}
+					numberOfMonths={numberOfMonths}
+					oneDaySelectStyle={oneDaySelectStyle}
+					allDayStyles={allDayStyles}
+					todayStyle={todayStyle}
+				/>
+				{children}
+			</div>
+		)
+	);
 };
 
 export default forwardRef(Calendar);

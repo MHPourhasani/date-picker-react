@@ -16,7 +16,6 @@ const DayPicker = ({
 	onChange,
 	numberOfMonths,
 	weekStartDayIndex,
-	handleFocusedDate,
 	monthAndYears: [monthNames],
 	allDayStyles,
 	todayStyle,
@@ -64,8 +63,6 @@ const DayPicker = ({
 			focused,
 			selectedDate,
 		});
-
-		handleFocusedDate(focused, dateObject);
 	};
 
 	const getClassName = (object, numberOfMonths) => {
