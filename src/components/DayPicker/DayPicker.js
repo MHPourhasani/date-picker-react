@@ -77,7 +77,8 @@ const DayPicker = ({
 		let mustDisplaySelectedDate = true;
 
 		if (!object.disabled) {
-			if (isSameDate(date, today)) names.push('text-primary'); // todayStyle
+			// if (isSameDate(date, today)) names.push('text-primary'); // todayStyle
+			if (isSameDate(date, today)) names.push(todayStyle); // todayStyle
 			if (isSelected(date) && mustDisplaySelectedDate) {
 				names.push('text-white bg-primary rounded-xl'); //rmdp-selected
 			}

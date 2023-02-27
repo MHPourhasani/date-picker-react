@@ -26,6 +26,9 @@ const DatePicker = ({
 	inputLabel,
 	inputLabelClassname,
 	inputClassname,
+	calendarStyle,
+	allDayStyles,
+	todayStyle,
 	...otherProps
 }) => {
 	let [date, setDate] = useState(),
@@ -145,6 +148,9 @@ const DatePicker = ({
 				onReady={() => setIsCalendarReady(true)}
 				DatePicker={datePickerRef.current}
 				datePickerProps={datePickerProps}
+				calendarStyle={calendarStyle}
+				allDayStyles={allDayStyles}
+				todayStyle={todayStyle}
 				{...otherProps}>
 				{children}
 				{renderButtons()}
@@ -164,8 +170,6 @@ const DatePicker = ({
 
 		if (input || !isVisible) {
 			setIsVisible(true);
-		} else {
-			closeCalendar();
 		}
 	};
 

@@ -39,18 +39,8 @@ const ShowDayPicker = ({
 								};
 
 								let allProps = getAllProps(object, state),
-									mustAddClassName = mustDisplayDay(object) && !object.disabled,
-									// mustAddClassName = !object.disabled,
-									className = ``,
-									children = allProps.children;
-
-								if (mustAddClassName)
-									className = `${className} ${allProps.className || ''}`;
-
-								delete allProps.className;
-								delete allProps.children;
-
-								let parentClassName = getClassName(object);
+									children = allProps.children,
+									parentClassName = getClassName(object);
 
 								return (
 									<div
@@ -62,7 +52,7 @@ const ShowDayPicker = ({
 											selectDay(object, monthIndex, numberOfMonths);
 										}}>
 										<span
-											className={`${className} flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-14 hover:border-1.5 hover:border-primary`}
+											className={`flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-14 hover:border-1.5 hover:border-primary`}
 											{...allProps}>
 											{mustDisplayDay(object) && !object.hidden
 												? children ?? object.day
