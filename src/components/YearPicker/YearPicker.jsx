@@ -6,12 +6,13 @@ import DateObject from 'react-date-object';
 import toLocaleDigits from '../../common/toLocaleDigits';
 
 // icons
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 
-import styles from './YearPicker2.module.css';
+// styles
+import styles from './YearPicker.module.css';
 
-const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
-	const { date, today, minDate, maxDate, onlyYearPicker, onlyShowInRangeDates, year } = state,
+const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
+	const { date, today, minDate, maxDate, selectedDate, onlyShowInRangeDates, year } = state,
 		digits = date.digits;
 
 	const [selectedYear, setSelectedYear] = useState(today.year);
@@ -32,7 +33,7 @@ const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 		let years = [],
 			year = minYear;
 
-		for (var j = 0; j < 10; j++) {
+		for (let j = 0; j < 10; j++) {
 			years.push(year);
 			year++;
 		}
@@ -43,8 +44,7 @@ const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	const selectYear = (year) => {
 		if (notInRange(year)) return;
 
-		let date = new DateObject(state.date).setYear(year),
-			{ selectedDate, focused } = state;
+		let date = new DateObject(state.date).setYear(year);
 
 		if (minDate && date.monthIndex < minDate.monthIndex) {
 			date = date.setMonth(minDate.monthIndex + 1);
@@ -52,18 +52,19 @@ const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 			date = date.setMonth(maxDate.monthIndex + 1);
 		}
 
-		onChange(onlyYearPicker ? selectedDate : undefined, {
+		onChange(selectedDate, {
 			...state,
 			date,
-			focused,
 			selectedDate,
+			selectedYear,
 			mustShowYearPicker: false,
 		});
+		console.log(selectedDate.year);
 	};
 
 	const getClassName = (year) => {
-		let names = ['rmdp-day'],
-			{ date, selectedDate } = state;
+		let names = ['rmdp-day'];
+		// { date, selectedDate } = state;
 
 		if (notInRange(year)) names.push('text-secondary400'); // rmdp-disabled
 
@@ -78,11 +79,12 @@ const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 
 	return (
 		<div dir='rtl'>
-			<Listbox value={selectedYear} onChange={(e) => changeHandler(e)}>
+			{/* <Listbox value={selectedYear} onChange={(e) => changeHandler(e)}> */}
+			<Listbox value={selectedDate.year} onChange={(e) => changeHandler(e)}>
 				<div className='relative mt-1'>
-					<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-4 bg-white py-2'>
+					<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-4 bg-white py-2 text-15'>
 						<span className='block truncate'>{selectedYear}</span>
-						<IoIosArrowDown className='text-gray-400 h-auto w-4' aria-hidden='true' />
+						<ArrowDown />
 					</Listbox.Button>
 
 					<Transition
@@ -123,4 +125,4 @@ const YearPicker2 = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	);
 };
 
-export default YearPicker2;
+export default YearPicker;

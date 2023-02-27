@@ -104,7 +104,6 @@ const DatePicker = ({
 		ref.current = {
 			...ref.current,
 			date,
-			initialValue: value,
 		};
 
 		setDate(date);
@@ -130,16 +129,6 @@ const DatePicker = ({
 				/>
 			</div>
 		);
-	};
-
-	const setRef = (element) => {
-		if (element) {
-			element.openCalendar = () => openCalendar();
-			element.closeCalendar = closeCalendar;
-			element.isOpen = isVisible && isCalendarReady;
-		}
-
-		datePickerRef.current = element;
 	};
 
 	const renderCalendar = () => {
@@ -211,7 +200,6 @@ const DatePicker = ({
 
 	return (
 		<ElementPopper
-			ref={setRef}
 			element={renderInput()}
 			popper={isVisible && renderCalendar()}
 			active={isCalendarReady}

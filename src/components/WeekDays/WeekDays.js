@@ -7,6 +7,7 @@ const WeekDays = ({
 	},
 	customWeekDays,
 	weekStartDayIndex,
+	className,
 }) => {
 	let weekDays = useMemo(() => {
 		let weekDays = customWeekDays;
@@ -34,7 +35,8 @@ const WeekDays = ({
 
 	return (
 		// rmdp-week
-		<div className='flex w-full items-center justify-between text-16 font-medium text-primary'>
+		// <div className='flex items-center justify-between text-16 font-medium text-primary'>
+		<div className={`flex items-center justify-between text-16 font-medium text-primary ${className}`}>
 			{weekDays.map((weekDay, index) => (
 				<span key={index} className=''>
 					{weekDay}

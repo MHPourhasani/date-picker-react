@@ -1,4 +1,4 @@
-import { IoIosArrowForward } from 'react-icons/io';
+import { ReactComponent as ArrowRight } from '../../assets/svg/arrow-right.svg';
 
 const Arrow = ({ direction, onClick, disabled }) => {
 	return (
@@ -8,9 +8,9 @@ const Arrow = ({ direction, onClick, disabled }) => {
 			}`}
 			onClick={onClick}>
 			{direction === 'right' ? (
-				<IoIosArrowForward className='h-auto w-5 rotate-180' />
+				<ArrowRight className='rotate-180' />
 			) : (
-				<IoIosArrowForward className='h-auto w-5' />
+				<ArrowRight className='' />
 			)}
 		</span>
 	);

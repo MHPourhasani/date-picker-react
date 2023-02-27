@@ -1,11 +1,11 @@
 import Arrow from '../Arrow/Arrow';
-import YearPicker2 from '../YearPicker2/YearPicker2';
+import YearPicker2 from '../YearPicker/YearPicker';
 
 const Header = ({
 	state,
 	setState,
-	disableMonthPicker,
 	onChange,
+	disableMonthPicker,
 	monthAndYears: [months, years],
 }) => {
 	let { date, mustShowYearPicker, minDate, maxDate, year, today } = state,
@@ -25,13 +25,9 @@ const Header = ({
 			{months.map((month, index) => (
 				<div
 					key={index}
-					className='flex w-fit items-center justify-between' // rmdp-header-values
+					className='flex w-full items-center justify-between' // rmdp-header-values
 				>
-					{
-						<span className={`flex w-16 cursor-pointer justify-between`}>
-							<YearPicker2 state={state} onChange={onChange} />
-						</span>
-					}
+					<YearPicker2 state={state} onChange={onChange} />
 					<span className={`flex w-32 cursor-pointer items-center justify-between`}>
 						{getButton('left')}
 						{month}
