@@ -28,14 +28,7 @@ const DayPicker = ({
 	const months = useMemo(() => {
 		return getMonths(ref.current.date, numberOfMonths, weekStartDayIndex);
 		// eslint-disable-next-line
-	}, [
-		date.monthIndex,
-		date.year,
-		date.calendar,
-		date.locale,
-		numberOfMonths,
-		weekStartDayIndex,
-	]);
+	}, [date.monthIndex, date.year, date.calendar, date.locale, numberOfMonths, weekStartDayIndex]);
 
 	const mustDisplayDay = (object) => {
 		if (object.current) return true;
@@ -65,10 +58,11 @@ const DayPicker = ({
 		});
 	};
 
-	const getClassName = (object, numberOfMonths) => {
+	const getClassName = (object) => {
 		let names = [
 				// allDayStyles,
 				'rmdp-day',
+				'text-14',
 			],
 			{ date, current } = object;
 
@@ -80,7 +74,7 @@ const DayPicker = ({
 
 		if (!current) names.push('rmdp-deactive');
 
-		let mustDisplaySelectedDate = numberOfMonths === 1;
+		let mustDisplaySelectedDate = true;
 
 		if (!object.disabled) {
 			if (isSameDate(date, today)) names.push('text-primary'); // todayStyle

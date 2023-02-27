@@ -88,8 +88,6 @@ const DatePicker = ({
 
 		const checkDate = (date) => {
 			if (!(date instanceof DateObject)) date = new DateObject({ date, calendar, locale });
-			date.set({ locale });
-
 			return date;
 		};
 

@@ -49,13 +49,13 @@ const ShowDayPicker = ({
 								delete allProps.className;
 								delete allProps.children;
 
-								let parentClassName = getClassName(object, numberOfMonths);
+								let parentClassName = getClassName(object);
 
 								return (
 									<div
 										// یک روز
 										key={i}
-										className={`cursor-pointer text-secondary800 ${parentClassName} text-14`}
+										className={`cursor-pointer text-secondary800 ${parentClassName} text-14 w-12 h-12`}
 										onClick={() => {
 											if (!mustDisplayDay(object) || object.disabled) return;
 											selectDay(object, monthIndex, numberOfMonths);

@@ -1,14 +1,13 @@
 import { useMemo } from 'react';
 import isArray from '../../common/isArray';
-import DateObject from 'react-date-object';
 
-export default function WeekDays({
+const WeekDays = ({
 	state: {
 		date: { calendar, locale },
 	},
 	customWeekDays,
 	weekStartDayIndex,
-}) {
+}) => {
 	let weekDays = useMemo(() => {
 		let weekDays = customWeekDays;
 
@@ -24,16 +23,10 @@ export default function WeekDays({
 
 				return weekDay;
 			});
-		} else {
-			weekDays = new DateObject({
-				year: 1,
-				calendar,
-				locale,
-			}).weekDays.map((weekDay) => weekDay.shortName);
 		}
 
 		return weekDays;
-	}, [calendar, locale, customWeekDays]);
+	}, [customWeekDays]);
 
 	weekDays = [...weekDays]
 		.slice(weekStartDayIndex)
@@ -43,8 +36,12 @@ export default function WeekDays({
 		// rmdp-week
 		<div className='flex w-full items-center justify-between text-16 font-medium text-primary'>
 			{weekDays.map((weekDay, index) => (
-				<span key={index}>{weekDay}</span>
+				<span key={index} className=''>
+					{weekDay}
+				</span>
 			))}
 		</div>
 	);
-}
+};
+
+export default WeekDays;
