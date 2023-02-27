@@ -16,18 +16,18 @@ const ShowDayPicker = ({
 	return (
 		<div className='my-7 w-[395px]'>
 			{months.map((weeks, monthIndex) => (
-				<div key={monthIndex} className='w-full flex flex-col items-center justify-center'>
+				<div key={monthIndex} className='flex w-full flex-col items-center justify-center'>
 					<WeekDays
 						state={state}
 						customWeekDays={weekDays}
 						weekStartDayIndex={weekStartDayIndex}
-						className='w-[380px]'
+						className='mb-3 flex w-full items-center justify-between gap-10 text-16 font-medium text-primary'
 					/>
 					{weeks.map((week, index) => (
 						<div
 							// هر هفته
 							key={index}
-							className='flex w-full items-center gap-3 justify-between'>
+							className='flex w-full items-center justify-center gap-3.5'>
 							{/* rmdp-week */}
 							{/* یک هفته */}
 							{week.map((object, i) => {
@@ -56,7 +56,7 @@ const ShowDayPicker = ({
 									<div
 										// یک روز
 										key={i}
-										className={`text-secondary800 ${parentClassName} mx text-14`}
+										className={`text-secondary800 ${parentClassName} w-full text-14`}
 										onClick={() => {
 											if (!mustDisplayDay(object) || object.disabled) return;
 											selectDay(object, monthIndex, numberOfMonths);

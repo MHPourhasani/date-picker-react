@@ -16,11 +16,6 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 		digits = date.digits;
 
 	const [selectedYear, setSelectedYear] = useState(today.year);
-
-	const changeHandler = (e) => {
-		setSelectedYear(e);
-	};
-
 	let minYear = today.year - 4;
 
 	minYear = minYear - 12 * Math.ceil((minYear - year) / 12);
@@ -33,7 +28,7 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 		let years = [],
 			year = minYear;
 
-		for (let j = 0; j < 10; j++) {
+		for (let i = 0; i < 10; i++) {
 			years.push(year);
 			year++;
 		}
@@ -64,7 +59,6 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 
 	const getClassName = (year) => {
 		let names = ['rmdp-day'];
-		// { date, selectedDate } = state;
 
 		if (notInRange(year)) names.push('text-secondary400'); // rmdp-disabled
 
@@ -80,7 +74,7 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	return (
 		<div dir='rtl'>
 			{/* <Listbox value={selectedYear} onChange={(e) => changeHandler(e)}> */}
-			<Listbox value={selectedDate.year} onChange={(e) => changeHandler(e)}>
+			<Listbox value={selectedDate.year} onChange={(e) => setSelectedYear(e)}>
 				<div className='relative mt-1'>
 					<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-4 bg-white py-2 text-15'>
 						<span className='block truncate'>{selectedYear}</span>
