@@ -104,7 +104,7 @@ const Calendar = ({
 
 	return (
 		state.today && (
-			<div className={`z-200 w-full bg-white ${calendarStyle} p-8`}>
+			<div dir='rtl' className={`z-200 w-full bg-white ${calendarStyle} p-8`}>
 				{/* rmdp-wrapper ==> rmdp-calendar */}
 				<Header {...globalProps} disableMonthPicker={disableMonthPicker} />
 				<DayPicker

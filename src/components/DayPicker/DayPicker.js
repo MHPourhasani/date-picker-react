@@ -19,6 +19,7 @@ const DayPicker = ({
 	monthAndYears: [monthNames],
 	allDayStyles,
 	todayStyle,
+	selectedDayStyle,
 }) => {
 	const ref = useRef({}),
 		{ today, minDate, maxDate, date, selectedDate } = state;
@@ -34,7 +35,7 @@ const DayPicker = ({
 		if (object.current) return true;
 	};
 
-	const selectDay = ({ date: dateObject, current }, monthIndex, numberOfMonths) => {
+	const selectDay = ({ date: dateObject, current }, numberOfMonths) => {
 		let { selectedDate, focused, date } = state,
 			{ hour, minute, second } = date;
 
@@ -59,11 +60,7 @@ const DayPicker = ({
 	};
 
 	const getClassName = (object) => {
-		let names = [
-				// allDayStyles,
-				'rmdp-day',
-				'text-14',
-			],
+		let names = ['rmdp-day', 'text-14', allDayStyles],
 			{ date, current } = object;
 
 		if ((minDate && date < minDate) || (maxDate && date > maxDate) || object.disabled) {
@@ -77,10 +74,10 @@ const DayPicker = ({
 		let mustDisplaySelectedDate = true;
 
 		if (!object.disabled) {
-			// if (isSameDate(date, today)) names.push('text-primary'); // todayStyle
 			if (isSameDate(date, today)) names.push(todayStyle); // todayStyle
 			if (isSelected(date) && mustDisplaySelectedDate) {
-				names.push('text-white bg-primary rounded-xl'); //rmdp-selected
+				// names.push('text-white bg-primary rounded-xl'); //rmdp-selected
+				names.push(selectedDayStyle); //rmdp-selected
 			}
 		}
 
@@ -101,6 +98,8 @@ const DayPicker = ({
 			numberOfMonths={numberOfMonths}
 			selectDay={selectDay}
 			selectedDate={selectedDate}
+			isSelected={isSelected}
+			selectedDayStyle={selectedDayStyle}
 		/>
 	);
 };

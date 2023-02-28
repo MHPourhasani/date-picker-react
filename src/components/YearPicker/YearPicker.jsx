@@ -54,7 +54,6 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 			selectedYear,
 			mustShowYearPicker: false,
 		});
-		console.log(selectedDate.year);
 	};
 
 	const getClassName = (year) => {
@@ -72,48 +71,44 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	};
 
 	return (
-		<div dir='rtl'>
-			{/* <Listbox value={selectedYear} onChange={(e) => changeHandler(e)}> */}
-			<Listbox value={selectedDate.year} onChange={(e) => setSelectedYear(e)}>
-				<div className='relative mt-1'>
-					<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-4 bg-white py-2 text-15'>
-						<span className='block truncate'>{selectedYear}</span>
-						<ArrowDown />
-					</Listbox.Button>
+		<div>
+			<Listbox onChange={(e) => setSelectedYear(e)}>
+				{console.log(selectedYear)}
+				<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-5 bg-white py-2 text-15'>
+					<span className='block'>{selectedDate ? selectedDate.year : selectedYear}</span>
+					<ArrowDown />
+				</Listbox.Button>
 
-					<Transition
-						as={Fragment}
-						leave='transition ease-in duration-100'
-						leaveFrom='opacity-100'
-						leaveTo='opacity-0'
-						className={styles.scrollbar_hidden}>
-						<Listbox.Options className='absolute h-60 w-36 overflow-y-scroll rounded-md border-1 border-secondary300 bg-white py-1 text-15 shadow-calendar focus:outline-none'>
-							{years.map((year, index) => (
-								<Listbox.Option
-									key={index}
-									value={year}
-									disabled={notInRange(year)}
-									onClick={() => selectYear(year)}
-									className={({ active }) =>
-										`${getClassName(
-											year
-										)} relative flex cursor-pointer select-none flex-col items-start py-2 pr-4 disabled:text-secondary400 ${
-											active ? 'text-primary' : 'text-secondary800'
-										}`
-									}>
-									{({ selected }) => (
-										<span
-											className={`truncate font-medium ${
-												selected ? 'text-primary' : ''
-											}`}>
-											{toLocaleDigits(year.toString(), digits)}
-										</span>
-									)}
-								</Listbox.Option>
-							))}
-						</Listbox.Options>
-					</Transition>
-				</div>
+				<Transition
+					as={Fragment}
+					leave='transition ease-in duration-100'
+					leaveFrom='opacity-100'
+					leaveTo='opacity-0'
+					className={styles.scrollbar_hidden}>
+					<Listbox.Options className='absolute h-60 w-36 overflow-y-scroll rounded-md border-1 border-secondary300 bg-white py-1 text-15 shadow-calendar focus:outline-none'>
+						{years.map((year) => (
+							<Listbox.Option
+								key={year}
+								value={year}
+								disabled={notInRange(year)}
+								onClick={() => selectYear(year)}
+								className={({ active }) =>
+									`${getClassName(
+										year
+									)} relative flex cursor-pointer select-none flex-col items-start py-2 pr-4 disabled:text-secondary400 ${
+										active ? 'text-primary' : 'text-secondary800'
+									}`
+								}>
+								{({ selected }) => (
+									<span
+										className={`font-medium ${selected ? 'text-primary' : ''}`}>
+										{toLocaleDigits(year.toString(), digits)}
+									</span>
+								)}
+							</Listbox.Option>
+						))}
+					</Listbox.Options>
+				</Transition>
 			</Listbox>
 		</div>
 	);

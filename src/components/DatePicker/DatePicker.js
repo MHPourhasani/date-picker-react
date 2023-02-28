@@ -29,6 +29,7 @@ const DatePicker = ({
 	calendarStyle,
 	allDayStyles,
 	todayStyle,
+	selectedDayStyle,
 	...otherProps
 }) => {
 	let [date, setDate] = useState(),
@@ -114,7 +115,7 @@ const DatePicker = ({
 
 	const renderInput = () => {
 		return (
-			<div className='flex flex-col items-start gap-1'>
+			<div dir='rtl' className='flex flex-col items-start gap-1'>
 				<label htmlFor='datePickerInput' className={`${inputLabelClassname}`}>
 					{inputLabel}
 				</label>
@@ -151,6 +152,7 @@ const DatePicker = ({
 				calendarStyle={calendarStyle}
 				allDayStyles={allDayStyles}
 				todayStyle={todayStyle}
+				selectedDayStyle={selectedDayStyle}
 				{...otherProps}>
 				{children}
 				{renderButtons()}

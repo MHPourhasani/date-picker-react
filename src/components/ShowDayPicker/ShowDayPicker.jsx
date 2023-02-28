@@ -12,7 +12,11 @@ const ShowDayPicker = ({
 	numberOfMonths,
 	selectDay,
 	selectedDate,
+	isSelected,
+	selectedDayStyle,
 }) => {
+	let mustDisplaySelectedDate = true;
+
 	return (
 		<div className='my-7 w-[395px]'>
 			{months.map((weeks, monthIndex) => (
@@ -31,6 +35,7 @@ const ShowDayPicker = ({
 							{/* rmdp-week */}
 							{/* یک هفته */}
 							{week.map((object, i) => {
+								let { date, current } = object;
 								//To clear the properties which are added from the previous render
 								object = {
 									date: object.date,
@@ -46,7 +51,11 @@ const ShowDayPicker = ({
 									<div
 										// یک روز
 										key={i}
-										className={`text-secondary800 ${parentClassName} w-full text-14`}
+										className={`text-secondary800 ${parentClassName} ${
+											isSelected(date) && mustDisplaySelectedDate
+												? selectedDayStyle
+												: ''
+										} w-full text-14`}
 										onClick={() => {
 											if (!mustDisplayDay(object) || object.disabled) return;
 											selectDay(object, monthIndex, numberOfMonths);
