@@ -60,11 +60,11 @@ const DayPicker = ({
 	};
 
 	const getClassName = (object) => {
-		let names = ['rmdp-day', 'text-14', allDayStyles],
+		let names = ['rmdp-day'],
 			{ date, current } = object;
 
 		if ((minDate && date < minDate) || (maxDate && date > maxDate) || object.disabled) {
-			names.push('rmdp-disabled text-secondary400');
+			names.push('rmdp-disabled');
 
 			if (!object.disabled) object.disabled = true;
 		}
@@ -74,10 +74,9 @@ const DayPicker = ({
 		let mustDisplaySelectedDate = true;
 
 		if (!object.disabled) {
-			if (isSameDate(date, today)) names.push(todayStyle); // todayStyle
+			if (isSameDate(date, today)) names.push('rmdp-today'); // todayStyle
 			if (isSelected(date) && mustDisplaySelectedDate) {
-				// names.push('text-white bg-primary rounded-xl'); //rmdp-selected
-				names.push(selectedDayStyle); //rmdp-selected
+				names.push('text-white bg-primary rounded-xl'); //rmdp-selected
 			}
 		}
 
@@ -90,8 +89,8 @@ const DayPicker = ({
 
 	return (
 		<ShowDayPicker
-			months={months}
 			state={state}
+			months={months}
 			weekStartDayIndex={weekStartDayIndex}
 			mustDisplayDay={mustDisplayDay}
 			getClassName={getClassName}
@@ -99,6 +98,7 @@ const DayPicker = ({
 			selectDay={selectDay}
 			selectedDate={selectedDate}
 			isSelected={isSelected}
+			todayStyle={todayStyle}
 			selectedDayStyle={selectedDayStyle}
 		/>
 	);

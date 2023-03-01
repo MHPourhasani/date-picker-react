@@ -72,10 +72,15 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 
 	return (
 		<div>
-			<Listbox onChange={(e) => setSelectedYear(e)}>
-				{console.log(selectedYear)}
-				<Listbox.Button className='relative flex w-auto cursor-pointer items-center gap-5 bg-white py-2 text-15'>
-					<span className='block'>{selectedDate ? selectedDate.year : selectedYear}</span>
+			<Listbox
+				value={selectedDate.year !== today.year ? selectedDate.year : selectedYear}
+				onChange={(e) => setSelectedYear(e)}>
+				<Listbox.Button
+					value={selectedDate.year !== today.year ? selectedDate.year : selectedYear}
+					className='relative flex w-auto cursor-pointer items-center gap-5 bg-white py-2 text-15'>
+					<span className='block'>
+						{selectedDate.year !== today.year ? selectedDate.year : selectedYear}
+					</span>
 					<ArrowDown />
 				</Listbox.Button>
 
@@ -95,7 +100,7 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 								className={({ active }) =>
 									`${getClassName(
 										year
-									)} relative flex cursor-pointer select-none flex-col items-start py-2 pr-4 disabled:text-secondary400 ${
+									)} flex cursor-pointer select-none flex-col items-start py-2 pr-4 disabled:text-secondary400 ${
 										active ? 'text-primary' : 'text-secondary800'
 									}`
 								}>

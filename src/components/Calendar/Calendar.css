@@ -1,20 +1,10 @@
 :root {
-	--rmdp-primary: #0074d9;
+	--rmdp-primary: #3880ff;
 	--rmdp-secondary: #4ca6f5;
 	--rmdp-shadow: #8798ad;
 	--rmdp-today: #7fdbff;
 	--rmdp-hover: #7ea6f0;
 	--rmdp-border: #cfd8e2;
-	--highlight-red-color: #cc0303;
-	--highlight-red-color-deactive: #e08e8e;
-	--highlight-red-selected: #ea0034;
-	--highlight-red-selected-deactive: #e4b0ba;
-	--highlight-red-hover: #ff6687;
-	--highlight-green-color: #00796b;
-	--highlight-green-color-deactive: #7ab3ac;
-	--highlight-green-selected: #009688;
-	--highlight-green-selected-deactive: #749c98;
-	--highlight-green-hover: #4db6ac;
 }
 
 .rmdp-wrapper {
@@ -29,29 +19,9 @@
 	box-shadow: 0 0 5px var(--rmdp-shadow);
 }
 
-.rmdp-border {
-	border: 1px solid var(--rmdp-border);
-}
-
 .rmdp-calendar {
 	/* padding: 4px; */
 	/* height: max-content; */
-}
-
-.rmdp-border-top {
-	border-top: 1px solid var(--rmdp-border);
-}
-
-.rmdp-border-bottom {
-	border-bottom: 1px solid var(--rmdp-border);
-}
-
-.rmdp-border-left {
-	border-left: 1px solid var(--rmdp-border);
-}
-
-.rmdp-border-right {
-	border-right: 1px solid var(--rmdp-border);
 }
 
 /* .rmdp-week,
@@ -66,8 +36,8 @@
 
 .rmdp-day,
 .rmdp-week-day {
-	height: 48px;
-	width: 48px;
+	/* height: 48px; */
+	/* width: 48px; */
 	/* cursor: pointer; */
 	/* position: relative; */
 	/* color: black; */
@@ -75,13 +45,13 @@
 }
 
 .rmdp-week-day {
-	cursor: default;
+	/* cursor: default;
 	color: var(--rmdp-primary);
 	font-weight: 500;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	font-size: 13px;
+	font-size: 13px; */
 }
 
 .rmdp-day span {
@@ -131,8 +101,9 @@
 }
 
 .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
-	/* background-color: var(--rmdp-hover);
-	color: white; */
+	/* background-color: var(--rmdp-hover);*/
+	/* color: white;  */
+	/* border-color: var(--rmdp-primary); */
 }
 
 .rmdp-day-picker {
@@ -197,9 +168,9 @@
 	/* border-radius: 50%; */
 	/* height: 20px; */
 	/* width: 20px; */
-	display: flex;
-	justify-content: center;
-	margin: 0 5px;
+	/* display: flex; */
+	/* justify-content: center;
+	margin: 0 5px; */
 }
 
 .rmdp-arrow-container:hover {
@@ -236,50 +207,6 @@
 	/* box-shadow: 0 0 3px var(--rmdp-shadow); */
 }
 
-.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) .highlight-red:hover {
-	background-color: var(--highlight-red-hover);
-}
-
-.rmdp-day:not(.rmdp-deactive) .highlight-red {
-	color: var(--highlight-red-color);
-}
-
-.rmdp-day.rmdp-deactive .highlight-red {
-	color: var(--highlight-red-color-deactive);
-}
-
-.rmdp-day.rmdp-selected .highlight-red {
-	background-color: var(--highlight-red-selected);
-	color: white;
-}
-
-.rmdp-day.rmdp-deactive.rmdp-selected .highlight-red {
-	background-color: var(--highlight-red-selected-deactive);
-	color: white;
-}
-
-.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) .highlight-green:hover {
-	background-color: var(--highlight-green-hover);
-}
-
-.rmdp-day:not(.rmdp-deactive) .highlight-green {
-	color: var(--highlight-green-color);
-}
-
-.rmdp-day.rmdp-deactive .highlight-green {
-	color: var(--highlight-green-color-deactive);
-}
-
-.rmdp-day.rmdp-selected .highlight-green {
-	background-color: var(--highlight-green-selected);
-	color: white;
-}
-
-.rmdp-day.rmdp-deactive.rmdp-selected .highlight-green {
-	background-color: var(--highlight-green-selected-deactive);
-	color: white;
-}
-
 .rmdp-day-hidden:hover span,
 .rmdp-day-hidden {
 	/* background-color: unset; */
@@ -290,41 +217,4 @@
 	/* font-size: 14px; */
 	/* margin: 3px 0; */
 	/* cursor: default; */
-}
-
-.rmdp-full-year {
-	/* grid-template-columns: 1fr 1fr 1fr; */
-}
-
-@media (max-width: 450px), (max-height: 450px) {
-	.rmdp-day,
-	.rmdp-week-day {
-		height: 28px;
-		width: 28px;
-	}
-
-	.rmdp-day span {
-		padding-left: 0.5px;
-		font-size: 12px;
-	}
-
-	.only.rmdp-year-picker,
-	.only.rmdp-month-picker {
-		width: 205px;
-		height: 200px;
-	}
-
-	/* .rmdp-header {
-    height: 32px;
-    font-size: 12px;
-    line-height: 32px;
-  } */
-
-	.rmdp-month-name {
-		font-size: 12px;
-	}
-
-	.rmdp-full-year {
-		/* grid-template-columns: 1fr 1fr; */
-	}
 }

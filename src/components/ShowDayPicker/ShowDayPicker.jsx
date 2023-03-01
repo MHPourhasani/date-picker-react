@@ -1,5 +1,6 @@
 import WeekDays from '../WeekDays/WeekDays';
 import getAllProps from '../../utils/getAllProps';
+import isSameDate from '../../common/isSameDate';
 
 const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
 const weekStartDayIndex = 0;
@@ -14,6 +15,7 @@ const ShowDayPicker = ({
 	selectedDate,
 	isSelected,
 	selectedDayStyle,
+	todayStyle,
 }) => {
 	let mustDisplaySelectedDate = true;
 
@@ -47,18 +49,23 @@ const ShowDayPicker = ({
 									children = allProps.children,
 									parentClassName = getClassName(object);
 
+								let todayClass =
+									!object.disabled && isSameDate(date, state.today) && todayStyle;
+
+								let selectedDayClass =
+									!object.disabled &&
+									isSelected(date) &&
+									mustDisplaySelectedDate &&
+									selectedDayStyle;
+
 								return (
 									<div
 										// یک روز
 										key={i}
-										className={`text-secondary800 ${parentClassName} ${
-											isSelected(date) && mustDisplaySelectedDate
-												? selectedDayStyle
-												: ''
-										} w-full text-14`}
+										className={`text-secondary800 ${parentClassName}`}
 										onClick={() => {
 											if (!mustDisplayDay(object) || object.disabled) return;
-											selectDay(object, monthIndex, numberOfMonths);
+											selectDay(object, numberOfMonths);
 										}}>
 										<span
 											className={`flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl text-14 hover:border-1.5 hover:border-primary`}
