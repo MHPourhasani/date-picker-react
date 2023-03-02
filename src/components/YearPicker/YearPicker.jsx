@@ -9,7 +9,7 @@ import toLocaleDigits from '../../common/toLocaleDigits';
 import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 
 // styles
-import styles from './YearPicker.module.css';
+import styles from '../../styles/scrollbar.module.css';
 
 const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 	const { date, today, minDate, maxDate, selectedDate, onlyShowInRangeDates, year } = state,

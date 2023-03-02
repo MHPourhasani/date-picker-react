@@ -35,7 +35,6 @@ const WeekDays = ({
 
 	return (
 		// rmdp-week
-		// <div className='flex items-center justify-between gap-10 text-16 font-medium text-primary'>
 		<div
 			className={`${className}`}>
 			{weekDays.map((weekDay, index) => (

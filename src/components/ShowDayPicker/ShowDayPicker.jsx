@@ -1,6 +1,5 @@
 import WeekDays from '../WeekDays/WeekDays';
 import getAllProps from '../../utils/getAllProps';
-import isSameDate from '../../common/isSameDate';
 
 const weekDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
 const weekStartDayIndex = 0;
@@ -13,12 +12,9 @@ const ShowDayPicker = ({
 	numberOfMonths,
 	selectDay,
 	selectedDate,
-	isSelected,
 	selectedDayStyle,
 	todayStyle,
 }) => {
-	let mustDisplaySelectedDate = true;
-
 	return (
 		<div className='my-7 w-[395px]'>
 			{months.map((weeks, monthIndex) => (
@@ -48,15 +44,6 @@ const ShowDayPicker = ({
 								let allProps = getAllProps(object, state),
 									children = allProps.children,
 									parentClassName = getClassName(object);
-
-								let todayClass =
-									!object.disabled && isSameDate(date, state.today) && todayStyle;
-
-								let selectedDayClass =
-									!object.disabled &&
-									isSelected(date) &&
-									mustDisplaySelectedDate &&
-									selectedDayStyle;
 
 								return (
 									<div
